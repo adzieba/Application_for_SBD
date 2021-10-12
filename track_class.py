@@ -8,6 +8,7 @@ class Track():
         self.end_table_x_index = 0
         self.end_table_y_index = 0
         self.track_len = 0
+        self.moves = []
     
     def __del__( self ):
         print("anulowanie trasy")

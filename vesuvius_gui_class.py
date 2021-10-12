@@ -38,7 +38,6 @@ class Vesuvius_gui():
         self.track_creating_active = False
         self.new_track = None
 
-
         if self.import_tables_config():
             self.make_window()
             self.draw_tables()
@@ -164,6 +163,18 @@ class Vesuvius_gui():
         frame.pack_propagate( 0 )
         frame.place( x = x_pos, y = y_pos )
         return frame
+
+    def accept_plate_popup( self ):
+        print("pokaz popup")
+        popup = Toplevel( height = 100, width = 300 )
+        popup.title("nazwa ścieżki")
+        popup.pack_propagate( 0 )
+
+        label = Label( popup, text = "to jest popup")
+        label.pack( fill = 'x', padx = 50, pady = 5 )
+
+        button_close = Button( popup, text = "Close ", command = popup.destroy )
+        button_close.pack( fill = 'x' )
         
     def main( self ):
         mainloop()

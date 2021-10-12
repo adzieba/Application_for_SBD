@@ -60,6 +60,9 @@ class Plate( Button ):
 
         self.moving_auto = False
 
+    def __del__( self ):
+        print("płyta zdjęta")
+
     def plate_select( self ):
 
         if not self.gui.track_creating_active:
@@ -192,7 +195,7 @@ class Plate( Button ):
                 
                 if self.gui.track_creating_active:
                     self.gui.new_track.track_len += 1
-                    print("aktualna dlugosc: ", self.gui.new_track.track_len )
+                    self.gui.new_track.moves.append( direction )
                     
     def plate_go_up( self ):
         new_y_pos = self.y_pos - self.gui.tile_height
@@ -252,8 +255,13 @@ class Plate( Button ):
             self.gui.new_track.end_table = self.table
             self.gui.new_track.end_table_x_index = self.table.x_index
             self.gui.new_track.end_table_y_index = self.table.y_index
-            print( "start:", self.gui.new_track.start_table, "koniec:", self.gui.new_track.end_table, "dlugosc:", self.gui.new_track.track_len )
             self.gui.tracks.append( self.gui.new_track )
+
+            print( self.gui.new_track.start_table, self.gui.new_track.start_table.x_index, self.gui.new_track.start_table.y_index, 
+                   self.gui.new_track.end_table,   self.gui.new_track.end_table.x_index,   self.gui.new_track.end_table.y_index )
+            
+            self.gui.accept_plate_popup()
+
         elif mode == 0:
             self.gui.new_track = None
        
@@ -263,3 +271,4 @@ class Plate( Button ):
         self.plate_menu.destroy()
         self.plate_track_menu.destroy()
         self.destroy()
+        self.gui.plate_list.remove( self )
