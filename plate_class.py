@@ -18,20 +18,34 @@ class Plate( Button ):
         self.x_pos   = self.table.x_pos
         self.y_pos   = self.table.y_pos
 
-        # ppm plate
-        self.plate_menu = Menu( self.gui.window_background, tearoff = 0 )
-        self.plate_menu.add_command( label = "Usuń płytę", command = self.plate_delete )
-
         self.frame = Frame( self.gui.window_background, height = self.gui.tile_height, width = self.gui.tile_width )
         self.frame.pack_propagate( 0 )
         self.frame.place( x = self.x_pos, y = self.y_pos )
         super().__init__( self.frame )
 
+        # ppm plate
+        self.plate_menu = Menu( self.gui.window_background, tearoff = 0 )
+        self.plate_menu.add_command( label = "Idź - góra",  command = lambda: self.plate_move( 1 ) )
+        self.plate_menu.add_command( label = "Idź - dół ",  command = lambda: self.plate_move( 2 ) )
+        self.plate_menu.add_command( label = "Idź - lewo",  command = lambda: self.plate_move( 3 ) )
+        self.plate_menu.add_command( label = "Idź - prawo", command = lambda: self.plate_move( 4 ) )
+        self.plate_menu.add_separator()
+        self.plate_menu.add_command( label = "Zacznij rysować ścieżkę ", command = self.activate_track_creating )
+        self.plate_menu.add_separator()
+        self.plate_menu.add_command( label = "Usuń płytę", command = self.plate_delete )
+
+        self.plate_track_menu = Menu( self.gui.window_background, tearoff = 0 )
+        self.plate_track_menu.add_command( label = "Ścieżka - góra",  command = lambda: self.plate_move( 1 ) )
+        self.plate_track_menu.add_command( label = "Ścieżka - dół ",  command = lambda: self.plate_move( 2 ) )
+        self.plate_track_menu.add_command( label = "Ścieżka - lewo",  command = lambda: self.plate_move( 3 ) )
+        self.plate_track_menu.add_command( label = "Ścieżka - prawo", command = lambda: self.plate_move( 4 ) )
+        self.plate_track_menu.add_separator()
+        self.plate_track_menu.add_command( label = "Zakończ rysować ściezkę ", command = self.deactivate_track_creating )
+        
         self["image"] = self.gui.table_images[10]
         self["border"] = 0
         self.config( relief = SUNKEN )
-        self.bind('<Button-1>', lambda event: self.plate_move_manual())
-        #self.bind('<Button-3>', lambda event: self.plate_move_auto())
+        self.bind('<Button-1>', lambda event: self.plate_select())
         self.bind('<Button-3>', self.show_plate_menu )
         self.bind('<Up>',       lambda event: self.plate_move( 1 ))
         self.bind('<Down>',     lambda event: self.plate_move( 2 ))
@@ -44,15 +58,12 @@ class Plate( Button ):
 
         self.moving_auto = False
 
-    def plate_move_manual( self ):
-        self.focus_set()
-        self.gui.selected_plate = self
-          
-        #if len( self.table.move_directions ) > 0:
-        #    direction_index =  randint( 0, len( self.table.move_directions ) - 1 ) 
-        #    direction = self.table.move_directions[ direction_index ]
-        #    self.plate_move( direction )   
+    def plate_select( self ):
 
+        if not self.gui.track_creating_active:
+            self.focus_set()
+            self.gui.selected_plate = self
+          
     def plate_move_auto( self ): 
         print("lista:", self.gui.task_list)
 
@@ -214,10 +225,25 @@ class Plate( Button ):
             return True
 
     def show_plate_menu( self, event ):
-        self.plate_menu.tk_popup( event.x_root, event.y_root )
+
+        if self.gui.track_creating_active:
+
+            if self.gui.selected_plate == self:
+                self.plate_track_menu.tk_popup( event.x_root, event.y_root )
+
+        else:
+            self.plate_menu.tk_popup( event.x_root, event.y_root )
+
+    def activate_track_creating( self ):
+        self.plate_select()
+        self.gui.track_creating_active = True
+
+    def deactivate_track_creating( self ):
+        self.gui.track_creating_active = False
 
     def plate_delete( self ):
         self.table.plate_on_table = False
         self.frame.destroy()
         self.plate_menu.destroy()
+        self.plate_track_menu.destroy()
         self.destroy()

@@ -86,17 +86,6 @@ class Vesuvius_gui():
             img = img.resize( (self.tile_width, self.tile_height ), Image.ANTIALIAS )
             self.table_images.append( ImageTk.PhotoImage( img ) )
 
-        # rysuj strzałki
-        arrow_up    = self.new_button( self.window_background, self.tile_height, self.tile_width, self.window_width - 100, self.window_height - 100, self.table_images[11] )
-        arrow_down  = self.new_button( self.window_background, self.tile_height, self.tile_width, self.window_width - 100, self.window_height - 50,  self.table_images[12] )
-        arrow_left  = self.new_button( self.window_background, self.tile_height, self.tile_width, self.window_width - 150, self.window_height - 50,  self.table_images[13] )
-        arrow_right = self.new_button( self.window_background, self.tile_height, self.tile_width, self.window_width - 50,  self.window_height - 50,  self.table_images[14] )
-        
-        arrow_up.bind(   '<Button-1>', lambda event: self.selected_plate.plate_move( 1 ) )
-        arrow_down.bind( '<Button-1>', lambda event: self.selected_plate.plate_move( 2 ) )
-        arrow_left.bind( '<Button-1>', lambda event: self.selected_plate.plate_move( 3 ) )
-        arrow_right.bind('<Button-1>', lambda event: self.selected_plate.plate_move( 4 ) )
-
         # rysuj menu górne
         menu_bar = Menu( self.window_background )
 
