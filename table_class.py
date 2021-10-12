@@ -18,7 +18,7 @@ class Table( Button ):
         self.plate_on_table = False
         self.callvalue = 0
         self.sendvalue = 0
-
+        
         # ppm moulding table
         self.moulding_menu = Menu( self.gui.window_background, tearoff = 0 )
         self.moulding_menu.add_command( label = "Wyślij płytę", command = None )

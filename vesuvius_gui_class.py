@@ -16,6 +16,7 @@ class Vesuvius_gui():
         self.plate_list   = []
         self.table_images = []
         self.composing_tables = []
+        self.tracks = []
         self.table_objects_scheme = []
         self.table_graphics_dir = [ 
             r"C:\Users\azieba\Desktop\Projekty\python\vesuviusgui\Graphics\station_down.png",    #0  # pyimage1
@@ -35,7 +36,8 @@ class Vesuvius_gui():
             r"C:\Users\azieba\Desktop\Projekty\python\vesuviusgui\Graphics\arrow_right.png" ]    #14 # pyimage15
 
         self.track_creating_active = False
-        self.tiles_cnt = 0
+        self.new_track = None
+
 
         if self.import_tables_config():
             self.make_window()

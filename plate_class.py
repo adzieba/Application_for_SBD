@@ -5,6 +5,7 @@ import queue
 import time
 from vesuvius_gui_class import *
 from threading_task_class import *
+from track_class import *
 from random import randint
 
 class Plate( Button ):
@@ -25,22 +26,23 @@ class Plate( Button ):
 
         # ppm plate
         self.plate_menu = Menu( self.gui.window_background, tearoff = 0 )
-        self.plate_menu.add_command( label = "Idź - góra",  command = lambda: self.plate_move( 1 ) )
-        self.plate_menu.add_command( label = "Idź - dół ",  command = lambda: self.plate_move( 2 ) )
-        self.plate_menu.add_command( label = "Idź - lewo",  command = lambda: self.plate_move( 3 ) )
-        self.plate_menu.add_command( label = "Idź - prawo", command = lambda: self.plate_move( 4 ) )
+        self.plate_menu.add_command( label = "Idź - góra",  command = lambda: self.plate_move( 1 ))
+        self.plate_menu.add_command( label = "Idź - dół ",  command = lambda: self.plate_move( 2 ))
+        self.plate_menu.add_command( label = "Idź - lewo",  command = lambda: self.plate_move( 3 ))
+        self.plate_menu.add_command( label = "Idź - prawo", command = lambda: self.plate_move( 4 ))
         self.plate_menu.add_separator()
         self.plate_menu.add_command( label = "Zacznij rysować ścieżkę ", command = self.activate_track_creating )
         self.plate_menu.add_separator()
         self.plate_menu.add_command( label = "Usuń płytę", command = self.plate_delete )
 
         self.plate_track_menu = Menu( self.gui.window_background, tearoff = 0 )
-        self.plate_track_menu.add_command( label = "Ścieżka - góra",  command = lambda: self.plate_move( 1 ) )
-        self.plate_track_menu.add_command( label = "Ścieżka - dół ",  command = lambda: self.plate_move( 2 ) )
-        self.plate_track_menu.add_command( label = "Ścieżka - lewo",  command = lambda: self.plate_move( 3 ) )
-        self.plate_track_menu.add_command( label = "Ścieżka - prawo", command = lambda: self.plate_move( 4 ) )
+        self.plate_track_menu.add_command( label = "Ścieżka - góra",  command = lambda: self.plate_move( 1 ))
+        self.plate_track_menu.add_command( label = "Ścieżka - dół ",  command = lambda: self.plate_move( 2 ))
+        self.plate_track_menu.add_command( label = "Ścieżka - lewo",  command = lambda: self.plate_move( 3 ))
+        self.plate_track_menu.add_command( label = "Ścieżka - prawo", command = lambda: self.plate_move( 4 ))
         self.plate_track_menu.add_separator()
-        self.plate_track_menu.add_command( label = "Zakończ rysować ściezkę ", command = self.deactivate_track_creating )
+        self.plate_track_menu.add_command( label = "Zakończ rysować ścieżkę ", command = lambda: self.deactivate_track_creating( 1 )) 
+        self.plate_track_menu.add_command( label = "Anuluj ścieżkę ", command = lambda: self.deactivate_track_creating( 0 ) )
         
         self["image"] = self.gui.table_images[10]
         self["border"] = 0
@@ -187,6 +189,10 @@ class Plate( Button ):
                 self.table.plate_on_table = False
                 self.table = next_table
                 self.table.plate_on_table = True
+                
+                if self.gui.track_creating_active:
+                    self.gui.new_track.track_len += 1
+                    print("aktualna dlugosc: ", self.gui.new_track.track_len )
                     
     def plate_go_up( self ):
         new_y_pos = self.y_pos - self.gui.tile_height
@@ -237,10 +243,20 @@ class Plate( Button ):
     def activate_track_creating( self ):
         self.plate_select()
         self.gui.track_creating_active = True
+        self.gui.new_track = Track( self.table )
 
-    def deactivate_track_creating( self ):
+    def deactivate_track_creating( self, mode ):
         self.gui.track_creating_active = False
 
+        if mode == 1:
+            self.gui.new_track.end_table = self.table
+            self.gui.new_track.end_table_x_index = self.table.x_index
+            self.gui.new_track.end_table_y_index = self.table.y_index
+            print( "start:", self.gui.new_track.start_table, "koniec:", self.gui.new_track.end_table, "dlugosc:", self.gui.new_track.track_len )
+            self.gui.tracks.append( self.gui.new_track )
+        elif mode == 0:
+            self.gui.new_track = None
+       
     def plate_delete( self ):
         self.table.plate_on_table = False
         self.frame.destroy()
