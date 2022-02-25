@@ -1,0 +1,676 @@
+{
+    "layout": [
+        "................",
+        "..C+M------+....",
+        "...++------+-D..",
+        "....|......|....",
+        "...M+------+....",
+        "...M+......|....",
+        "..M-+------+-D..",
+        "....|......|....",
+        "..M-+------+-D..",
+        "....C......|....",
+        "...........C....",
+        "................"
+    ],
+    "window": {
+        "rows": 12,
+        "columns": 16,
+        "tile_width": 50,
+        "tile_height": 50,
+        "table_area_width": 800,
+        "table_area_height": 600,
+        "app_width": 1000,
+        "app_height": 800
+    },
+    "graphics": {
+        "folder": "Graphics2"
+    },
+    "tables": {
+        "types": {
+            ".": {
+                "name": "blank"
+            },
+            "|": {
+                "name": "conveyor_v",
+                "moves": [
+                    "up",
+                    "down"
+                ],
+                "picture": "conveyor.png"
+            },
+            "-": {
+                "name": "conveyor_h",
+                "moves": [
+                    "left",
+                    "right"
+                ],
+                "picture": "conveyor.png"
+            },
+            "+": {
+                "name": "turntable",
+                "moves": [
+                    "up",
+                    "down",
+                    "left",
+                    "right"
+                ],
+                "picture": "turntable.png"
+            },
+            "D": {
+                "name": "moulding",
+                "moves": [
+                    "up",
+                    "down",
+                    "left",
+                    "right"
+                ],
+                "picture": "station.png"
+            },
+            "M": {
+                "name": "demoulding",
+                "moves": [
+                    "up",
+                    "down",
+                    "left",
+                    "right"
+                ],
+                "picture": "station.png"
+            },
+            "C": {
+                "name": "composing",
+                "moves": [
+                    "up",
+                    "down",
+                    "left",
+                    "right"
+                ],
+                "picture": "station.png"
+            }
+        },
+        "objects": {
+            "composing0": {
+                "type": "C",
+                "x": 2,
+                "y": 1,
+                "move_directions": [
+                    "right"
+                ]
+            },
+            "turntable1": {
+                "type": "+",
+                "x": 3,
+                "y": 1,
+                "move_directions": [
+                    "down",
+                    "left",
+                    "right"
+                ]
+            },
+            "demoulding2": {
+                "type": "M",
+                "x": 4,
+                "y": 1,
+                "move_directions": [
+                    "right"
+                ]
+            },
+            "conveyor_h3": {
+                "type": "-",
+                "x": 5,
+                "y": 1,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h4": {
+                "type": "-",
+                "x": 6,
+                "y": 1,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h5": {
+                "type": "-",
+                "x": 7,
+                "y": 1,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h6": {
+                "type": "-",
+                "x": 8,
+                "y": 1,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h7": {
+                "type": "-",
+                "x": 9,
+                "y": 1,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h8": {
+                "type": "-",
+                "x": 10,
+                "y": 1,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "turntable9": {
+                "type": "+",
+                "x": 11,
+                "y": 1,
+                "move_directions": [
+                    "down",
+                    "left"
+                ]
+            },
+            "turntable10": {
+                "type": "+",
+                "x": 3,
+                "y": 2,
+                "move_directions": [
+                    "up",
+                    "right"
+                ]
+            },
+            "turntable11": {
+                "type": "+",
+                "x": 4,
+                "y": 2,
+                "move_directions": [
+                    "up",
+                    "down",
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h12": {
+                "type": "-",
+                "x": 5,
+                "y": 2,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h13": {
+                "type": "-",
+                "x": 6,
+                "y": 2,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h14": {
+                "type": "-",
+                "x": 7,
+                "y": 2,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h15": {
+                "type": "-",
+                "x": 8,
+                "y": 2,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h16": {
+                "type": "-",
+                "x": 9,
+                "y": 2,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h17": {
+                "type": "-",
+                "x": 10,
+                "y": 2,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "turntable18": {
+                "type": "+",
+                "x": 11,
+                "y": 2,
+                "move_directions": [
+                    "up",
+                    "down",
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h19": {
+                "type": "-",
+                "x": 12,
+                "y": 2,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "moulding20": {
+                "type": "D",
+                "x": 13,
+                "y": 2,
+                "move_directions": [
+                    "left"
+                ]
+            },
+            "conveyor_v21": {
+                "type": "|",
+                "x": 4,
+                "y": 3,
+                "move_directions": [
+                    "up",
+                    "down"
+                ]
+            },
+            "conveyor_v22": {
+                "type": "|",
+                "x": 11,
+                "y": 3,
+                "move_directions": [
+                    "up",
+                    "down"
+                ]
+            },
+            "demoulding23": {
+                "type": "M",
+                "x": 3,
+                "y": 4,
+                "move_directions": [
+                    "right"
+                ]
+            },
+            "turntable24": {
+                "type": "+",
+                "x": 4,
+                "y": 4,
+                "move_directions": [
+                    "up",
+                    "down",
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h25": {
+                "type": "-",
+                "x": 5,
+                "y": 4,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h26": {
+                "type": "-",
+                "x": 6,
+                "y": 4,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h27": {
+                "type": "-",
+                "x": 7,
+                "y": 4,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h28": {
+                "type": "-",
+                "x": 8,
+                "y": 4,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h29": {
+                "type": "-",
+                "x": 9,
+                "y": 4,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h30": {
+                "type": "-",
+                "x": 10,
+                "y": 4,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "turntable31": {
+                "type": "+",
+                "x": 11,
+                "y": 4,
+                "move_directions": [
+                    "up",
+                    "down",
+                    "left"
+                ]
+            },
+            "demoulding32": {
+                "type": "M",
+                "x": 3,
+                "y": 5,
+                "move_directions": [
+                    "right"
+                ]
+            },
+            "turntable33": {
+                "type": "+",
+                "x": 4,
+                "y": 5,
+                "move_directions": [
+                    "up",
+                    "down",
+                    "left"
+                ]
+            },
+            "conveyor_v34": {
+                "type": "|",
+                "x": 11,
+                "y": 5,
+                "move_directions": [
+                    "up",
+                    "down"
+                ]
+            },
+            "demoulding35": {
+                "type": "M",
+                "x": 2,
+                "y": 6,
+                "move_directions": [
+                    "right"
+                ]
+            },
+            "conveyor_h36": {
+                "type": "-",
+                "x": 3,
+                "y": 6,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "turntable37": {
+                "type": "+",
+                "x": 4,
+                "y": 6,
+                "move_directions": [
+                    "up",
+                    "down",
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h38": {
+                "type": "-",
+                "x": 5,
+                "y": 6,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h39": {
+                "type": "-",
+                "x": 6,
+                "y": 6,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h40": {
+                "type": "-",
+                "x": 7,
+                "y": 6,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h41": {
+                "type": "-",
+                "x": 8,
+                "y": 6,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h42": {
+                "type": "-",
+                "x": 9,
+                "y": 6,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h43": {
+                "type": "-",
+                "x": 10,
+                "y": 6,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "turntable44": {
+                "type": "+",
+                "x": 11,
+                "y": 6,
+                "move_directions": [
+                    "up",
+                    "down",
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h45": {
+                "type": "-",
+                "x": 12,
+                "y": 6,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "moulding46": {
+                "type": "D",
+                "x": 13,
+                "y": 6,
+                "move_directions": [
+                    "left"
+                ]
+            },
+            "conveyor_v47": {
+                "type": "|",
+                "x": 4,
+                "y": 7,
+                "move_directions": [
+                    "up",
+                    "down"
+                ]
+            },
+            "conveyor_v48": {
+                "type": "|",
+                "x": 11,
+                "y": 7,
+                "move_directions": [
+                    "up",
+                    "down"
+                ]
+            },
+            "demoulding49": {
+                "type": "M",
+                "x": 2,
+                "y": 8,
+                "move_directions": [
+                    "right"
+                ]
+            },
+            "conveyor_h50": {
+                "type": "-",
+                "x": 3,
+                "y": 8,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "turntable51": {
+                "type": "+",
+                "x": 4,
+                "y": 8,
+                "move_directions": [
+                    "up",
+                    "down",
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h52": {
+                "type": "-",
+                "x": 5,
+                "y": 8,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h53": {
+                "type": "-",
+                "x": 6,
+                "y": 8,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h54": {
+                "type": "-",
+                "x": 7,
+                "y": 8,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h55": {
+                "type": "-",
+                "x": 8,
+                "y": 8,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h56": {
+                "type": "-",
+                "x": 9,
+                "y": 8,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h57": {
+                "type": "-",
+                "x": 10,
+                "y": 8,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "turntable58": {
+                "type": "+",
+                "x": 11,
+                "y": 8,
+                "move_directions": [
+                    "up",
+                    "down",
+                    "left",
+                    "right"
+                ]
+            },
+            "conveyor_h59": {
+                "type": "-",
+                "x": 12,
+                "y": 8,
+                "move_directions": [
+                    "left",
+                    "right"
+                ]
+            },
+            "moulding60": {
+                "type": "D",
+                "x": 13,
+                "y": 8,
+                "move_directions": [
+                    "left"
+                ]
+            },
+            "composing61": {
+                "type": "C",
+                "x": 4,
+                "y": 9,
+                "move_directions": [
+                    "up"
+                ]
+            },
+            "conveyor_v62": {
+                "type": "|",
+                "x": 11,
+                "y": 9,
+                "move_directions": [
+                    "up",
+                    "down"
+                ]
+            },
+            "composing63": {
+                "type": "C",
+                "x": 11,
+                "y": 10,
+                "move_directions": [
+                    "up"
+                ]
+            }
+        }
+    }
+}

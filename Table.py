@@ -1,10 +1,10 @@
 from tkinter import *
-from plate_class import *
+from Plate import *
 from PIL     import ImageTk, Image
 
 class Table( Button ):
 
-    def __init__( self, gui, move_directions, x_index, y_index ):
+    def __init__( self, gui, type, move_directions, x_index, y_index ):
         self.gui = gui
         self.move_directions = move_directions
         self.x_index = x_index
@@ -15,6 +15,7 @@ class Table( Button ):
         self.tile_y_center = self.y_pos + self.gui.tile_height / 2
         self.type  = "default"
         self.position = "default"
+        self.label = None
         self.plate_on_table = False
         self.callvalue = 0
         self.sendvalue = 0
@@ -24,18 +25,18 @@ class Table( Button ):
         self.moulding_menu.add_command( label = "Wyślij płytę", command = None )
         self.moulding_menu.add_separator()
         self.moulding_menu.add_command( label = "Wezwij płytę", command = None ) 
-        self.moulding_menu.add_radiobutton( label='A', var = self.callvalue, value = 0 )      
-        self.moulding_menu.add_radiobutton( label='B', var = self.callvalue, value = 1 )      
-        self.moulding_menu.add_radiobutton( label='C', var = self.callvalue, value = 2 ) 
+        self.moulding_menu.add_radiobutton( label = 'A', var = self.callvalue, value = 0 )      
+        self.moulding_menu.add_radiobutton( label = 'B', var = self.callvalue, value = 1 )      
+        self.moulding_menu.add_radiobutton( label = 'C', var = self.callvalue, value = 2 ) 
          
         # ppm demoulding table
         self.demoulding_menu = Menu( self.gui.window_background, tearoff = 0 )
         self.demoulding_menu.add_command( label = "Wezwij płytę", command = None )
         self.demoulding_menu.add_separator()
         self.demoulding_menu.add_command( label = "Wyślij płytę", command = None )        
-        self.demoulding_menu.add_radiobutton( label='A', var = self.sendvalue, value = 0 )      
-        self.demoulding_menu.add_radiobutton( label='B', var = self.sendvalue, value = 1 )      
-        self.demoulding_menu.add_radiobutton( label='C', var = self.sendvalue, value = 2 ) 
+        self.demoulding_menu.add_radiobutton( label = 'A', var = self.sendvalue, value = 0 )      
+        self.demoulding_menu.add_radiobutton( label = 'B', var = self.sendvalue, value = 1 )      
+        self.demoulding_menu.add_radiobutton( label = 'C', var = self.sendvalue, value = 2 ) 
        
         # ppm composing table
         self.composing_menu = Menu( self.gui.window_background, tearoff = 0 )
@@ -50,41 +51,63 @@ class Table( Button ):
         self.frame.place( x = self.x_pos, y = self.y_pos )
         super().__init__( self.frame )
         
-        if self.gui.tables_config[self.y_index][self.x_index] == "L":
+        if type == "D":
             self.type = "demoulding"
-            self["image"] = self.gui.table_images[1]
+            if 'right' in self.move_directions: 
+                self["image"] = self.gui.table_images[2]
+            elif 'left' in self.move_directions:
+                self["image"] = self.gui.table_images[5]
+            elif 'up' in self.move_directions:
+                self["image"] = self.gui.table_images[6]
+            elif 'down' in self.move_directions:
+                self["image"] = self.gui.table_images[7]
+
             self.bind( '<Button-3>', self.show_demoulding_menu )
 
-        elif self.gui.tables_config[self.y_index][self.x_index] == "R":
+        elif type == "M":
             self.type = "moulding"
-            self["image"] = self.gui.table_images[2]  
+
+            if 'right' in self.move_directions: 
+                self["image"] = self.gui.table_images[2]
+            elif 'left' in self.move_directions:
+                self["image"] = self.gui.table_images[5]
+            elif 'up' in self.move_directions:
+                self["image"] = self.gui.table_images[6]
+            elif 'down' in self.move_directions:
+                self["image"] = self.gui.table_images[7]  
+
             self.bind( '<Button-3>', self.show_moulding_menu )
 
-        elif self.gui.tables_config[self.y_index][self.x_index] == "U":
+        elif type == "C":
             self.type = "composing"
-            self["image"] = self.gui.table_images[3] 
+
+            if 'right' in self.move_directions: 
+                self["image"] = self.gui.table_images[2]
+            elif 'left' in self.move_directions:
+                self["image"] = self.gui.table_images[5]
+            elif 'up' in self.move_directions:
+                self["image"] = self.gui.table_images[6]
+            elif 'down' in self.move_directions:
+                self["image"] = self.gui.table_images[7]
+
             self.bind( '<Button-3>', self.show_composing_menu )
             self.gui.composing_tables.append( self )
 
-        elif self.gui.tables_config[self.y_index][self.x_index] == "O":
+        elif type == "+":
             self.type = "turntable"
-            self.position = "vertical"
-            self["image"] = self.gui.table_images[8]
+            self.position = "horizontal"
+            self["image"] = self.gui.table_images[3]
             self.bind( '<Button-3>', self.show_turntable_menu )
 
-        elif self.gui.tables_config[self.y_index][self.x_index] == "H":
+        elif type == "|":
             self.type = "conveyor"
             self["image"] = self.gui.table_images[4]
             
-        elif self.gui.tables_config[self.y_index][self.x_index] == "V":
+        elif type == "-":
             self.type = "conveyor"
-            self["image"] = self.gui.table_images[5]
-            
-        elif self.gui.tables_config[self.y_index][self.x_index] == "P":
-            self.type = "press"
-            self["image"] = self.gui.table_images[9]
-        
-        self.config( relief = SUNKEN)
+            self["image"] = self.gui.table_images[1]
+
+        self.config( relief = FLAT, borderwidth = 0 )        
         self.pack( fill = BOTH, expand = 1 )
         
     def show_turntable_menu( self, event ):
@@ -103,12 +126,12 @@ class Table( Button ):
     def table_turn( self ):
         print( "Turning table: ", self )
 
-        if self["image"] == "pyimage9":
-            self["image"] = self.gui.table_images[7]
-            self.position = "horizontal"
-        elif self["image"] == "pyimage8":
+        if self["image"] == "pyimage4":
             self["image"] = self.gui.table_images[8]
             self.position = "vertical"
+        elif self["image"] == "pyimage9":
+            self["image"] = self.gui.table_images[3]
+            self.position = "horizontal"
 
     def table_place_new_plate( self ):
         plate = Plate( self )

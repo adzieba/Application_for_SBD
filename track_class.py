@@ -1,6 +1,7 @@
 class Track():
 
-    def __init__( self, start_table ):
+    def __init__( self, gui, start_table ):
+        self.gui = gui
         self.start_table = start_table
         self.start_table_x_index = self.start_table.x_index
         self.start_table_y_index = self.start_table.y_index
@@ -12,5 +13,11 @@ class Track():
     
     def __del__( self ):
         print("anulowanie trasy")
-    
+
+    def accept_track( self, name ):
+        print(name)
+        pass
+
+    def cancel_track( self ):
+        pass
        

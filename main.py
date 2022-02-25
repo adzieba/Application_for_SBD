@@ -1,8 +1,8 @@
-from vesuvius_gui_class import *
+from SBD_Application import *
 
 if __name__ == "__main__":
-    App = Vesuvius_gui()
-    App.main()
-#
+    App = SBD_Application()
+    App.run()
+
 App.task_list.clear()
 print("App closed")

@@ -1,4 +1,4 @@
-from plate_class import *
+from Plate import *
 import os, sys
 import threading
 import time

@@ -3,7 +3,7 @@ from PIL     import ImageTk, Image
 import threading
 import queue
 import time
-from vesuvius_gui_class import *
+from SBD_Application import *
 from threading_task_class import *
 from track_class import *
 from random import randint
@@ -26,33 +26,33 @@ class Plate( Button ):
 
         # ppm plate
         self.plate_menu = Menu( self.gui.window_background, tearoff = 0 )
-        self.plate_menu.add_command( label = "Idź - góra",  command = lambda: self.plate_move( 1 ))
-        self.plate_menu.add_command( label = "Idź - dół ",  command = lambda: self.plate_move( 2 ))
-        self.plate_menu.add_command( label = "Idź - lewo",  command = lambda: self.plate_move( 3 ))
-        self.plate_menu.add_command( label = "Idź - prawo", command = lambda: self.plate_move( 4 ))
+        self.plate_menu.add_command( label = "Idź - góra",  command = lambda: self.plate_move( 'up' ))
+        self.plate_menu.add_command( label = "Idź - dół ",  command = lambda: self.plate_move( 'down' ))
+        self.plate_menu.add_command( label = "Idź - lewo",  command = lambda: self.plate_move( 'left' ))
+        self.plate_menu.add_command( label = "Idź - prawo", command = lambda: self.plate_move( 'right' ))
         self.plate_menu.add_separator()
         self.plate_menu.add_command( label = "Zacznij rysować ścieżkę ", command = self.activate_track_creating )
         self.plate_menu.add_separator()
         self.plate_menu.add_command( label = "Usuń płytę", command = self.plate_delete )
 
         self.plate_track_menu = Menu( self.gui.window_background, tearoff = 0 )
-        self.plate_track_menu.add_command( label = "Ścieżka - góra",  command = lambda: self.plate_move( 1 ))
-        self.plate_track_menu.add_command( label = "Ścieżka - dół ",  command = lambda: self.plate_move( 2 ))
-        self.plate_track_menu.add_command( label = "Ścieżka - lewo",  command = lambda: self.plate_move( 3 ))
-        self.plate_track_menu.add_command( label = "Ścieżka - prawo", command = lambda: self.plate_move( 4 ))
+        self.plate_track_menu.add_command( label = "Ścieżka - góra",  command = lambda: self.plate_move( 'up' ))
+        self.plate_track_menu.add_command( label = "Ścieżka - dół ",  command = lambda: self.plate_move( 'down' ))
+        self.plate_track_menu.add_command( label = "Ścieżka - lewo",  command = lambda: self.plate_move( 'left' ))
+        self.plate_track_menu.add_command( label = "Ścieżka - prawo", command = lambda: self.plate_move( 'right' ))
         self.plate_track_menu.add_separator()
         self.plate_track_menu.add_command( label = "Zakończ rysować ścieżkę ", command = lambda: self.deactivate_track_creating( 1 )) 
         self.plate_track_menu.add_command( label = "Anuluj ścieżkę ", command = lambda: self.deactivate_track_creating( 0 ) )
         
-        self["image"] = self.gui.table_images[10]
+        self["image"] = self.gui.table_images[0]
         self["border"] = 0
         self.config( relief = SUNKEN )
         self.bind('<Button-1>', lambda event: self.plate_select())
         self.bind('<Button-3>', self.show_plate_menu )
-        self.bind('<Up>',       lambda event: self.plate_move( 1 ))
-        self.bind('<Down>',     lambda event: self.plate_move( 2 ))
-        self.bind('<Left>',     lambda event: self.plate_move( 3 ))
-        self.bind('<Right>',    lambda event: self.plate_move( 4 ))
+        self.bind('<Up>',       lambda event: self.plate_move( 'up' ))
+        self.bind('<Down>',     lambda event: self.plate_move( 'down' ))
+        self.bind('<Left>',     lambda event: self.plate_move( 'left' ))
+        self.bind('<Right>',    lambda event: self.plate_move( 'right' ))
         self.pack( fill = BOTH, expand = 1 )
         self.gui.plate_list.append( self )
         self.focus_set()
@@ -90,11 +90,11 @@ class Plate( Button ):
 
     def plate_move( self, direction ):
         move_allowed = False
-                
+        
         if direction in self.table.move_directions:
 
-            if direction == 1:
-                next_table = self.gui.table_objects_scheme[ self.y_index - 1 ][ self.x_index ]
+            if direction == 'up':
+                next_table = self.gui.tables_list[ self.y_index - 1 ][ self.x_index ]
                 next_turntable_need_turn = ( next_table.type == "turntable" and next_table.position == "horizontal" )
                 print("actual table: ", self.table, "with type: ", self.table.type, "next table: ", next_table, "with type: ", next_table.type, "is there other plate: ", next_table.plate_on_table )
 
@@ -118,8 +118,8 @@ class Plate( Button ):
                         else:
                             move_allowed = self.plate_go_up()
 
-            elif direction == 2:
-                next_table = self.gui.table_objects_scheme[ self.y_index + 1 ][ self.x_index ]
+            elif direction == 'down':
+                next_table = self.gui.tables_list[ self.y_index + 1 ][ self.x_index ]
                 next_turntable_need_turn = ( next_table.type == "turntable" and next_table.position == "horizontal" )
                 print("actual table: ", self.table, "with type: ", self.table.type, "next table: ", next_table, "with type: ", next_table.type, "is there other plate: ", next_table.plate_on_table )
 
@@ -141,8 +141,8 @@ class Plate( Button ):
                         else:
                             move_allowed = self.plate_go_down()
 
-            elif direction == 3:
-                next_table = self.gui.table_objects_scheme[ self.y_index ][ self.x_index - 1 ]
+            elif direction == 'left':
+                next_table = self.gui.tables_list[ self.y_index ][ self.x_index - 1 ]
                 next_turntable_need_turn = ( next_table.type == "turntable" and next_table.position == "vertical" )
                 print("actual table: ", self.table, "with type: ", self.table.type, "next table: ", next_table, "with type: ", next_table.type, "is there other plate: ", next_table.plate_on_table )
 
@@ -164,8 +164,8 @@ class Plate( Button ):
                         else:
                             move_allowed = self.plate_go_left()
 
-            elif direction == 4:
-                next_table = self.gui.table_objects_scheme[ self.y_index ][ self.x_index + 1 ]
+            elif direction == 'right':
+                next_table = self.gui.tables_list[ self.y_index ][ self.x_index + 1 ]
                 next_turntable_need_turn = ( next_table.type == "turntable" and next_table.position == "vertical" )
                 print("actual table: ", self.table, "with type: ", self.table.type, "next table: ", next_table, "with type: ", next_table.type, "is there other plate: ", next_table.plate_on_table )
 
@@ -196,7 +196,9 @@ class Plate( Button ):
                 if self.gui.track_creating_active:
                     self.gui.new_track.track_len += 1
                     self.gui.new_track.moves.append( direction )
-                    
+        else:
+            print("brak takiego ruchu")
+
     def plate_go_up( self ):
         new_y_pos = self.y_pos - self.gui.tile_height
 
@@ -246,10 +248,12 @@ class Plate( Button ):
     def activate_track_creating( self ):
         self.plate_select()
         self.gui.track_creating_active = True
-        self.gui.new_track = Track( self.table )
+        self.gui.new_track = Track( self.gui, self.table )
 
     def deactivate_track_creating( self, mode ):
         self.gui.track_creating_active = False
+
+        self.gui.new_track.deactivate_track( mode )
 
         if mode == 1:
             self.gui.new_track.end_table = self.table
