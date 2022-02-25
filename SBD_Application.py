@@ -22,20 +22,19 @@ class SBD_Application():
         self.composing_tables = []
         self.tracks = []
         self.table_objects_scheme = []
-        self.table_graphics_dir = [ 
-            r"C:\Users\azieba\Desktop\Projekty\python\repozytoria\GUI_for_Vesuvius\Graphics2\plate.png",        #0
-            r"C:\Users\azieba\Desktop\Projekty\python\repozytoria\GUI_for_Vesuvius\Graphics2\conveyor_h.png",   #1
-            r"C:\Users\azieba\Desktop\Projekty\python\repozytoria\GUI_for_Vesuvius\Graphics2\station_right.png",#2    
-            r"C:\Users\azieba\Desktop\Projekty\python\repozytoria\GUI_for_Vesuvius\Graphics2\turntable_h.png",  #3
-            r"C:\Users\azieba\Desktop\Projekty\python\repozytoria\GUI_for_Vesuvius\Graphics2\conveyor_v.png",   #4
-            r"C:\Users\azieba\Desktop\Projekty\python\repozytoria\GUI_for_Vesuvius\Graphics2\station_left.png", #5
-            r"C:\Users\azieba\Desktop\Projekty\python\repozytoria\GUI_for_Vesuvius\Graphics2\station_up.png",   #6
-            r"C:\Users\azieba\Desktop\Projekty\python\repozytoria\GUI_for_Vesuvius\Graphics2\station_down.png", #7
-            r"C:\Users\azieba\Desktop\Projekty\python\repozytoria\GUI_for_Vesuvius\Graphics2\turntable_v.png" ] #8
+        self.table_graphics = [ 
+            "plate.png",         #0
+            "conveyor_h.png",    #1
+            "station_right.png", #2    
+            "turntable_h.png",   #3
+            "conveyor_v.png",    #4
+            "station_left.png",  #5
+            "station_up.png",    #6
+            "station_down.png",  #7
+            "turntable_v.png" ]  #8
 
         self.track_creating_active = False
         self.new_track = None
-
         self.tile_width  = self.config_file['window']['tile_width']
         self.tile_height = self.config_file['window']['tile_height']
         self.table_area_width  = self.config_file['window']['table_area_width']
@@ -43,8 +42,8 @@ class SBD_Application():
 
         self.draw_window()
 
-        for i in range( len( self.table_graphics_dir )):
-            img = Image.open( self.table_graphics_dir[i] )
+        for i in range( len( self.table_graphics )):
+            img = Image.open( os.path.join( sys.path[0], self.config_file['graphics']['folder'], self.table_graphics[i] ) )
             img = img.resize(( self.tile_width , self.tile_height ))
             self.table_images.append( ImageTk.PhotoImage( img ))
 
@@ -100,7 +99,6 @@ class SBD_Application():
             y = self.config_file['tables']['objects'][table_object]['y']
             type = self.config_file['tables']['objects'][table_object]['type']
             
-            #if self.config_file['tables']['objects'][table_object]['type'] != "blank":
             move_directions = self.config_file['tables']['objects'][table_object]['move_directions']
             table = Table( self, type, move_directions, x, y )
             self.tables_list[y][x] = table

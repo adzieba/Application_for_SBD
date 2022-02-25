@@ -50,7 +50,7 @@ class ConfigGenerator():
                                        'table_area_width':self.columns * self.tile_width, 'table_area_height':self.rows * self.tile_height, 
                                        'app_width':self.columns * self.tile_width + 200, 'app_height':self.rows * self.tile_height + 200 }
         
-        self.config_file['graphics'] = { 'folder':'Graphics2' }
+        self.config_file['graphics'] = { 'folder':'Graphics' }
         
         self.config_file['tables'] = {}
         self.config_file['tables']['types'] = {}
