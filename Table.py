@@ -122,7 +122,7 @@ class TurnTable( Table ):
 
         self.position = "horizontal"
         self["image"] = self.gui.table_images[3]
-        #self.bind( '<Button-3>', self.show_menu )
+        self.bind( '<Button-3>', self.show_menu )
 
     def show_menu( self, event ):
         self.menu.tk_popup( event.x_root, event.y_root )

@@ -3,10 +3,15 @@ from PIL     import ImageTk, Image
 import threading
 import queue
 import time
+import Table
 from SBD_Application import *
 from threading_task_class import *
 from track_class import *
 from random import randint
+
+class ExClass():
+    pass
+
 
 class Plate( Button ):
 
@@ -95,15 +100,14 @@ class Plate( Button ):
 
             if direction == 'up':
                 next_table = self.gui.tables_list[ self.y_index - 1 ][ self.x_index ]
+                is_nexttable_turntable = isinstance( next_table, Table.TurnTable )
 
                 if 'down' in next_table.move_directions:
-                    print( type( next_table ))
-                    print(next_table.position)
-                    next_turntable_need_turn = ( type( next_table ) == TurnTable and next_table.position == "horizontal" )
+                    next_turntable_need_turn = is_nexttable_turntable and next_table.position == "horizontal" 
 
                     print("actual table: ", self.table, "with type: ", "next table: ", next_table, "with type: ", "is there other plate: ", next_table.plate_on_table )
 
-                    if type( self.table ) == TurnTable:
+                    if isinstance( self.table, Table.TurnTable ):
                         print("ruszam z obrotowego")
 
                         if self.table.position == "horizontal":
@@ -125,12 +129,13 @@ class Plate( Button ):
 
             elif direction == 'down':
                 next_table = self.gui.tables_list[ self.y_index + 1 ][ self.x_index ]
+                is_nexttable_turntable = isinstance( next_table, Table.TurnTable )
 
                 if 'up' in next_table.move_directions:
-                    next_turntable_need_turn = ( type( next_table ) == TurnTable and next_table.position == "horizontal" )
+                    next_turntable_need_turn = ( is_nexttable_turntable and next_table.position == "horizontal" )
                     print("actual table: ", self.table, "with type: ", "next table: ", next_table, "with type: ", "is there other plate: ", next_table.plate_on_table )
 
-                    if type( self.table ) == TurnTable:
+                    if isinstance( self.table, Table.TurnTable ):
 
                         if self.table.position == "horizontal":
                             self.table.table_turn()
@@ -150,12 +155,13 @@ class Plate( Button ):
 
             elif direction == 'left':
                 next_table = self.gui.tables_list[ self.y_index ][ self.x_index - 1 ]
+                is_nexttable_turntable = isinstance( next_table, Table.TurnTable )
 
                 if 'right' in next_table.move_directions:
-                    next_turntable_need_turn = ( type( next_table ) == TurnTable and next_table.position == "vertical" )
+                    next_turntable_need_turn = ( is_nexttable_turntable and next_table.position == "vertical" )
                     print("actual table: ", self.table, "with type: ", "next table: ", next_table, "with type: ", "is there other plate: ", next_table.plate_on_table )
 
-                    if type( self.table ) == TurnTable:
+                    if isinstance( self.table, Table.TurnTable ):
                         
                         if self.table.position == "vertical":
                             self.table.table_turn()
@@ -175,12 +181,13 @@ class Plate( Button ):
 
             elif direction == 'right':
                 next_table = self.gui.tables_list[ self.y_index ][ self.x_index + 1 ]
+                is_nexttable_turntable = isinstance( next_table, Table.TurnTable )
 
                 if 'left' in next_table.move_directions:
-                    next_turntable_need_turn = ( type( next_table ) == TurnTable and next_table.position == "vertical" )
+                    next_turntable_need_turn = ( is_nexttable_turntable and next_table.position == "vertical" )
                     print("actual table: ", self.table, "with type: ", "next table: ", next_table, "with type: ", "is there other plate: ", next_table.plate_on_table )
 
-                    if type( self.table ) == TurnTable:
+                    if isinstance( self.table, Table.TurnTable ):
 
                         if self.table.position == "vertical":
                             self.table.table_turn()
