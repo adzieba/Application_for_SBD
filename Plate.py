@@ -95,98 +95,109 @@ class Plate( Button ):
 
             if direction == 'up':
                 next_table = self.gui.tables_list[ self.y_index - 1 ][ self.x_index ]
-                next_turntable_need_turn = ( next_table.type == "turntable" and next_table.position == "horizontal" )
-                print("actual table: ", self.table, "with type: ", self.table.type, "next table: ", next_table, "with type: ", next_table.type, "is there other plate: ", next_table.plate_on_table )
 
-                if self.table.type == "turntable":
-                    print("ruszam z obrotowego")
+                if 'down' in next_table.move_directions:
+                    print( type( next_table ))
+                    print(next_table.position)
+                    next_turntable_need_turn = ( type( next_table ) == TurnTable and next_table.position == "horizontal" )
 
-                    if self.table.position == "horizontal":
-                        self.table.table_turn()
-                        print("turning plate")
-                    else:
+                    print("actual table: ", self.table, "with type: ", "next table: ", next_table, "with type: ", "is there other plate: ", next_table.plate_on_table )
 
-                        if not next_table.plate_on_table:
-                            move_allowed = self.plate_go_up()
+                    if type( self.table ) == TurnTable:
+                        print("ruszam z obrotowego")
 
-                else:
-                    
-                    if not next_table.plate_on_table:
-                        
-                        if next_turntable_need_turn:
-                            next_table.table_turn()
+                        if self.table.position == "horizontal":
+                            self.table.table_turn()
+                            print("turning plate")
                         else:
-                            move_allowed = self.plate_go_up()
+
+                            if not next_table.plate_on_table:
+                                move_allowed = self.plate_go_up()
+
+                    else:
+                        
+                        if not next_table.plate_on_table:
+                            
+                            if next_turntable_need_turn:
+                                next_table.table_turn()
+                            else:
+                                move_allowed = self.plate_go_up()
 
             elif direction == 'down':
                 next_table = self.gui.tables_list[ self.y_index + 1 ][ self.x_index ]
-                next_turntable_need_turn = ( next_table.type == "turntable" and next_table.position == "horizontal" )
-                print("actual table: ", self.table, "with type: ", self.table.type, "next table: ", next_table, "with type: ", next_table.type, "is there other plate: ", next_table.plate_on_table )
 
-                if self.table.type == "turntable":
+                if 'up' in next_table.move_directions:
+                    next_turntable_need_turn = ( type( next_table ) == TurnTable and next_table.position == "horizontal" )
+                    print("actual table: ", self.table, "with type: ", "next table: ", next_table, "with type: ", "is there other plate: ", next_table.plate_on_table )
 
-                    if self.table.position == "horizontal":
-                        self.table.table_turn()
-                        print("turning plate")
-                    else:
+                    if type( self.table ) == TurnTable:
 
-                        if not next_table.plate_on_table:
-                            move_allowed = self.plate_go_down()
-
-                else:
-                    if not next_table.plate_on_table:
-
-                        if next_turntable_need_turn:
-                            next_table.table_turn()
+                        if self.table.position == "horizontal":
+                            self.table.table_turn()
+                            print("turning plate")
                         else:
-                            move_allowed = self.plate_go_down()
+
+                            if not next_table.plate_on_table:
+                                move_allowed = self.plate_go_down()
+
+                    else:
+                        if not next_table.plate_on_table:
+
+                            if next_turntable_need_turn:
+                                next_table.table_turn()
+                            else:
+                                move_allowed = self.plate_go_down()
 
             elif direction == 'left':
                 next_table = self.gui.tables_list[ self.y_index ][ self.x_index - 1 ]
-                next_turntable_need_turn = ( next_table.type == "turntable" and next_table.position == "vertical" )
-                print("actual table: ", self.table, "with type: ", self.table.type, "next table: ", next_table, "with type: ", next_table.type, "is there other plate: ", next_table.plate_on_table )
 
-                if self.table.type == "turntable":
-                    
-                    if self.table.position == "vertical":
-                        self.table.table_turn()
-                        print("turning plate")
+                if 'right' in next_table.move_directions:
+                    next_turntable_need_turn = ( type( next_table ) == TurnTable and next_table.position == "vertical" )
+                    print("actual table: ", self.table, "with type: ", "next table: ", next_table, "with type: ", "is there other plate: ", next_table.plate_on_table )
+
+                    if type( self.table ) == TurnTable:
+                        
+                        if self.table.position == "vertical":
+                            self.table.table_turn()
+                            print("turning plate")
+                        else:
+
+                            if not next_table.plate_on_table:
+                                move_allowed = self.plate_go_left()
+
                     else:
 
                         if not next_table.plate_on_table:
-                            move_allowed = self.plate_go_left()
-
-                else:
-
-                    if not next_table.plate_on_table:
-                        if next_turntable_need_turn:
-                            next_table.table_turn()
-                        else:
-                            move_allowed = self.plate_go_left()
+                            if next_turntable_need_turn:
+                                next_table.table_turn()
+                            else:
+                                move_allowed = self.plate_go_left()
 
             elif direction == 'right':
                 next_table = self.gui.tables_list[ self.y_index ][ self.x_index + 1 ]
-                next_turntable_need_turn = ( next_table.type == "turntable" and next_table.position == "vertical" )
-                print("actual table: ", self.table, "with type: ", self.table.type, "next table: ", next_table, "with type: ", next_table.type, "is there other plate: ", next_table.plate_on_table )
 
-                if self.table.type == "turntable":
+                if 'left' in next_table.move_directions:
+                    next_turntable_need_turn = ( type( next_table ) == TurnTable and next_table.position == "vertical" )
+                    print("actual table: ", self.table, "with type: ", "next table: ", next_table, "with type: ", "is there other plate: ", next_table.plate_on_table )
 
-                    if self.table.position == "vertical":
-                        self.table.table_turn()
-                        print("turning plate")
+                    if type( self.table ) == TurnTable:
+
+                        if self.table.position == "vertical":
+                            self.table.table_turn()
+                            print("turning plate")
+                        else:
+
+                            if not next_table.plate_on_table:
+                                move_allowed = self.plate_go_right()
+
                     else:
 
                         if not next_table.plate_on_table:
-                            move_allowed = self.plate_go_right()
-
-                else:
-
-                    if not next_table.plate_on_table:
-                        
-                        if next_turntable_need_turn:
-                            next_table.table_turn()
-                        else:
-                            move_allowed = self.plate_go_right()
+                            
+                            if next_turntable_need_turn:
+                                next_table.table_turn()
+                            else:
+                                move_allowed = self.plate_go_right()
 
             if move_allowed:
                 self.table.plate_on_table = False

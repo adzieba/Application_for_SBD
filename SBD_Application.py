@@ -97,10 +97,20 @@ class SBD_Application():
                     
             x = self.config_file['tables']['objects'][table_object]['x']
             y = self.config_file['tables']['objects'][table_object]['y']
-            type = self.config_file['tables']['objects'][table_object]['type']
-            
+            table_type = self.config_file['tables']['objects'][table_object]['type']
             move_directions = self.config_file['tables']['objects'][table_object]['move_directions']
-            table = Table( self, type, move_directions, x, y )
+
+            if table_type == "D":
+                table = DemouldingTable( self, table_type, move_directions, x, y )
+            elif table_type == "M":
+                table = MouldingTable( self, table_type, move_directions, x, y )
+            elif table_type == "C":
+                table = ComposingTable( self, table_type, move_directions, x, y )
+            elif table_type == "+":
+                table = TurnTable( self, table_type, move_directions, x, y )
+            elif table_type == "|" or table_type == "-":
+                table = ConveyorTable( self, table_type, move_directions, x, y )
+            
             self.tables_list[y][x] = table
 
     def finish_track_popup( self ):
