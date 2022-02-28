@@ -1,1 +1,1 @@
-# GUI_for_SBD
+# Application for SBD
