@@ -1,9 +1,10 @@
 from tkinter import *
+from turtle import screensize
 from PIL     import ImageTk, Image
 #from Plate import *
-from Table import *
+from Tables import *
 from random import randint
-import os, sys
+import os, sys, ctypes
 import threading
 import time
 import json
@@ -50,9 +51,17 @@ class SBD_Application():
         self.draw_tables()
 
     def draw_window( self ):
-        window_width  = self.config_file['window']['app_width']
-        window_height = self.config_file['window']['app_height']
-        window_size = "{}x{}+{}+{}".format( window_width, window_height, 200, 0 )
+
+        # place window on screen middle
+        user32 = ctypes.windll.user32
+        screen_width  = user32.GetSystemMetrics(0) 
+        screen_height = user32.GetSystemMetrics(1)
+        
+        self.window_width  = self.config_file['window']['app_width']
+        self.window_height = self.config_file['window']['app_height']
+        x_offset = int(( screen_width - self.window_width ) / 2 )
+        y_offset = int(( screen_height - self.window_height ) / 2 )
+        window_size = "{}x{}+{}+{}".format( self.window_width, self.window_height, x_offset, y_offset )
         
         # draw application window
         self.window = Tk()
@@ -63,8 +72,12 @@ class SBD_Application():
         self.window_background = Frame( self.window, bg = 'black' )
         self.window_background.pack_propagate( 0 )
         self.window_background.pack( fill = BOTH, expand = 1 )
+
+        self.visualization_background = Frame( self.window_background, width = self.table_area_width , height = self.table_area_height, bg = 'grey' )
+        self.visualization_background.pack_propagate( 0 )
+        self.visualization_background.pack( side = TOP, anchor = NW )
                         
-        # draw application menu
+        # assign application menu
         menu_bar = Menu( self.window_background )
 
         file_bar = Menu( menu_bar, tearoff = 0 )
@@ -91,25 +104,28 @@ class SBD_Application():
 
     def draw_tables( self ):
 
+        # table array filled with 0
         self.tables_list = [[0] * self.config_file['window']['columns'] for i in range(self.config_file['window']['rows'])]
 
+        # put table objects in assigned places
         for table_object in self.config_file['tables']['objects']:
                     
             x = self.config_file['tables']['objects'][table_object]['x']
             y = self.config_file['tables']['objects'][table_object]['y']
             table_type = self.config_file['tables']['objects'][table_object]['type']
+            name = table_object
             move_directions = self.config_file['tables']['objects'][table_object]['move_directions']
 
             if table_type == "D":
-                table = DemouldingTable( self, table_type, move_directions, x, y )
+                table = DemouldingTable( self, table_type, move_directions, x, y, name )
             elif table_type == "M":
-                table = MouldingTable( self, table_type, move_directions, x, y )
+                table = MouldingTable( self, table_type, move_directions, x, y, name )
             elif table_type == "C":
-                table = ComposingTable( self, table_type, move_directions, x, y )
+                table = ComposingTable( self, table_type, move_directions, x, y, name )
             elif table_type == "+":
-                table = TurnTable( self, table_type, move_directions, x, y )
+                table = TurnTable( self, table_type, move_directions, x, y, name )
             elif table_type == "|" or table_type == "-":
-                table = ConveyorTable( self, table_type, move_directions, x, y )
+                table = ConveyorTable( self, table_type, move_directions, x, y, name )
             
             self.tables_list[y][x] = table
 
@@ -124,12 +140,15 @@ class SBD_Application():
         popup.title("Nazwa ścieżki")
         popup.geometry( popup_size )
         popup.resizable( False, False )
-                
-        label = Label( popup, text = "Wprowadź nazwę ścieżki:" ).place( x = 40, y = 40 )
-        input_box = Entry( popup ).place( x = 40, y = 140 )
+                    
+        label_start_table = Label( popup, text = "początek ścieżki: " + str( self.new_track.start_table.name )).place( x = 40, y = 20 )
+        label_end_table   = Label( popup, text = "koniec ścieżki: "   + str( self.new_track.end_table.name )).place( x = 40, y = 50 )
+        label_track_len   = Label( popup, text = "długość ściezki: "  + str( self.new_track.track_len ) + str( self.new_track.moves ) ).place( x = 40, y = 80 )
+        label = Label( popup, text = "Wprowadź nazwę ścieżki:" ).place( x = 40, y = 110 )
+        input_box = Entry( popup ).place( x = 40, y = 140 ) 
 
         button_save =  Button( popup, text = "Zapisz", command = lambda : self.new_track.accept_track( label.get() )).place( x = 40, y = 240 )
-        button_close = Button( popup, text = "Anuluj", command = self.new_track.cancel_track ).place( x = 140, y = 240 )
+        button_close = Button( popup, text = "Anuluj", command = self.new_track.cancel_track_creating ).place( x = 140, y = 240 )
 
     def run( self ):
         mainloop()

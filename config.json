@@ -20,8 +20,10 @@
         "tile_height": 50,
         "table_area_width": 800,
         "table_area_height": 600,
-        "app_width": 1000,
-        "app_height": 800
+        "app_extra_width": 400,
+        "app_extra_height": 300,
+        "app_width": 1200,
+        "app_height": 900
     },
     "graphics": {
         "folder": "Graphics"

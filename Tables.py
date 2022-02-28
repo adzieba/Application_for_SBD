@@ -1,15 +1,16 @@
 from tkinter import *
-from Plate import *
+from Plates import *
 from PIL     import ImageTk, Image
 
 class Table( Button ):
 
-    def __init__( self, gui, type, move_directions, x_index, y_index ):
+    def __init__( self, gui, type, move_directions, x_index, y_index, name ):
 
         self.gui = gui
         self.move_directions = move_directions
         self.x_index = x_index
         self.y_index = y_index
+        self.name = name
         self.x_pos = self.x_index * self.gui.tile_width
         self.y_pos = self.y_index * self.gui.tile_height
         self.tile_x_center = self.x_pos + self.gui.tile_width  / 2
@@ -19,7 +20,7 @@ class Table( Button ):
         self.callvalue = 0
         self.sendvalue = 0
 
-        self.frame = Frame( self.gui.window_background, height = self.gui.tile_height, width = self.gui.tile_width )
+        self.frame = Frame( self.gui.visualization_background, height = self.gui.tile_height, width = self.gui.tile_width )
         self.frame.pack_propagate( 0 )
         self.frame.place( x = self.x_pos, y = self.y_pos )
 
@@ -30,11 +31,11 @@ class Table( Button ):
 
 class DemouldingTable( Table ):
 
-    def __init__(self, gui, type, move_directions, x_index, y_index):
+    def __init__(self, gui, type, move_directions, x_index, y_index, name ):
 
-        super().__init__(gui, type, move_directions, x_index, y_index)
+        super().__init__(gui, type, move_directions, x_index, y_index, name )
 
-        self.menu = Menu( self.gui.window_background, tearoff = 0 )
+        self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
         self.menu.add_command( label = "Wezwij płytę", command = None )
         self.menu.add_separator()
         self.menu.add_command( label = "Wyślij płytę", command = None )        
@@ -58,11 +59,11 @@ class DemouldingTable( Table ):
 
 class MouldingTable( Table ):
 
-    def __init__(self, gui, type, move_directions, x_index, y_index):
+    def __init__(self, gui, type, move_directions, x_index, y_index, name ):
 
-        super().__init__(gui, type, move_directions, x_index, y_index)
+        super().__init__(gui, type, move_directions, x_index, y_index, name )
         
-        self.menu = Menu( self.gui.window_background, tearoff = 0 )
+        self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
         self.menu.add_command( label = "Wyślij płytę", command = None )
         self.menu.add_separator()
         self.menu.add_command( label = "Wezwij płytę", command = None ) 
@@ -86,11 +87,11 @@ class MouldingTable( Table ):
 
 class ComposingTable( Table ):
 
-    def __init__(self, gui, type, move_directions, x_index, y_index):
+    def __init__(self, gui, type, move_directions, x_index, y_index, name ):
 
-        super().__init__(gui, type, move_directions, x_index, y_index)
+        super().__init__(gui, type, move_directions, x_index, y_index, name )
 
-        self.menu = Menu( self.gui.window_background, tearoff = 0 )
+        self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
         self.menu.add_command( label = "Nowa płyta", command = self.table_place_new_plate )
     
         if 'right' in self.move_directions: 
@@ -113,11 +114,11 @@ class ComposingTable( Table ):
 
 class TurnTable( Table ):
 
-    def __init__(self, gui, type, move_directions, x_index, y_index):
+    def __init__(self, gui, type, move_directions, x_index, y_index, name ):
 
-        super().__init__(gui, type, move_directions, x_index, y_index)
+        super().__init__(gui, type, move_directions, x_index, y_index, name )
 
-        self.menu = Menu( self.gui.window_background, tearoff = 0 )
+        self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
         self.menu.add_command( label = "Obróć stół", command = self.table_turn )
 
         self.position = "horizontal"
@@ -139,11 +140,9 @@ class TurnTable( Table ):
 
 class ConveyorTable( Table ):
 
-    def __init__(self, gui, type, move_directions, x_index, y_index):
+    def __init__(self, gui, type, move_directions, x_index, y_index, name ):
 
-        super().__init__(gui, type, move_directions, x_index, y_index)
-
-        print(type)
+        super().__init__(gui, type, move_directions, x_index, y_index, name )
 
         if type == "|":
             self["image"] = self.gui.table_images[4]

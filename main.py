@@ -1,4 +1,4 @@
-from SBD_Application import *
+from SBD_Applications import *
 
 if __name__ == "__main__":
     App = SBD_Application()

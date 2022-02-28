@@ -44,11 +44,14 @@ class ConfigGenerator():
         self.config_file = {}
         self.tile_width  = 50
         self.tile_height = 50
+        self.app_extra_width = 400
+        self.app_extra_height = 300
 
         self.config_file['layout'] = self.line_layout
         self.config_file['window'] = { 'rows':self.rows, 'columns':self.columns, 'tile_width':self.tile_width, 'tile_height':self.tile_height,
-                                       'table_area_width':self.columns * self.tile_width, 'table_area_height':self.rows * self.tile_height, 
-                                       'app_width':self.columns * self.tile_width + 200, 'app_height':self.rows * self.tile_height + 200 }
+                                       'table_area_width':self.columns * self.tile_width, 'table_area_height':self.rows * self.tile_height,
+                                       'app_extra_width': self.app_extra_width, 'app_extra_height':self.app_extra_height,  
+                                       'app_width':self.columns * self.tile_width + self.app_extra_width, 'app_height':self.rows * self.tile_height + self.app_extra_height }
         
         self.config_file['graphics'] = { 'folder':'Graphics' }
         
