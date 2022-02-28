@@ -41,16 +41,16 @@ class SBD_Application():
         self.table_area_width  = self.config_file['window']['table_area_width']
         self.table_area_height = self.config_file['window']['table_area_height']
 
-        self.draw_window()
+        self.drawWindow()
 
         for i in range( len( self.table_graphics )):
             img = Image.open( os.path.join( sys.path[0], self.config_file['graphics']['folder'], self.table_graphics[i] ) )
             img = img.resize(( self.tile_width , self.tile_height ))
             self.table_images.append( ImageTk.PhotoImage( img ))
 
-        self.draw_tables()
+        self.drawTables()
 
-    def draw_window( self ):
+    def drawWindow( self ):
 
         # place window on screen middle
         user32 = ctypes.windll.user32
@@ -102,7 +102,7 @@ class SBD_Application():
 
         self.window.config( menu = menu_bar )
 
-    def draw_tables( self ):
+    def drawTables( self ):
 
         # table array filled with 0
         self.tables_list = [[0] * self.config_file['window']['columns'] for i in range(self.config_file['window']['rows'])]
