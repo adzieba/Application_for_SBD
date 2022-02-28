@@ -32,7 +32,7 @@ class Plate( Button ):
         self.plate_menu.add_command( label = "Idź - lewo",  command = lambda: self.plate_move( 'left' ))
         self.plate_menu.add_command( label = "Idź - prawo", command = lambda: self.plate_move( 'right' ))
         self.plate_menu.add_separator()
-        self.plate_menu.add_command( label = "Zacznij rysować ścieżkę ", command = self.start_track_creating )
+        self.plate_menu.add_command( label = "Zacznij rysować ścieżkę ", command = self.newTrackForPlate )
         self.plate_menu.add_separator()
         self.plate_menu.add_command( label = "Usuń płytę", command = self.plate_delete )
 
@@ -42,8 +42,8 @@ class Plate( Button ):
         self.plate_track_menu.add_command( label = "Ścieżka - lewo",  command = lambda: self.plate_move( 'left' ))
         self.plate_track_menu.add_command( label = "Ścieżka - prawo", command = lambda: self.plate_move( 'right' ))
         self.plate_track_menu.add_separator()
-        self.plate_track_menu.add_command( label = "Zaakceptuj ścieżkę ", command = lambda: self.gui.new_track.accept_track( self.table )) 
-        self.plate_track_menu.add_command( label = "Anuluj ścieżkę ", command = lambda: self.gui.new_track.cancel_track_creating() )
+        self.plate_track_menu.add_command( label = "Zaakceptuj ścieżkę ", command = lambda: self.gui.new_track.accept_track_popup( self.table )) 
+        self.plate_track_menu.add_command( label = "Anuluj ścieżkę ",     command = lambda: self.gui.new_track.cancel_track() )
         
         self["image"] = self.gui.table_images[0]
         self["border"] = 0
@@ -257,8 +257,9 @@ class Plate( Button ):
         else:
             self.plate_menu.tk_popup( event.x_root, event.y_root )
 
-    def start_track_creating( self ):
+    def newTrackForPlate( self ):
         self.plate_select()
+        self.gui.new_track = None
         self.gui.new_track = Track( self.gui, self.table )
 
     def plate_delete( self ):

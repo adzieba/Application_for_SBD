@@ -129,27 +129,6 @@ class SBD_Application():
             
             self.tables_list[y][x] = table
 
-    def finish_track_popup( self ):
-        popup_width  = 600
-        popup_height = 400
-        popup_x_root = int( self.window.winfo_x() + self.window_width  / 2 - popup_width  / 2 )
-        popup_y_root = int( self.window.winfo_y() + self.window_height / 2 - popup_height / 2 )
-        popup_size   = "{}x{}+{}+{}".format( popup_width, popup_height, popup_x_root, popup_y_root )
-
-        popup = Toplevel()
-        popup.title("Nazwa ścieżki")
-        popup.geometry( popup_size )
-        popup.resizable( False, False )
-                    
-        label_start_table = Label( popup, text = "początek ścieżki: " + str( self.new_track.start_table.name )).place( x = 40, y = 20 )
-        label_end_table   = Label( popup, text = "koniec ścieżki: "   + str( self.new_track.end_table.name )).place( x = 40, y = 50 )
-        label_track_len   = Label( popup, text = "długość ściezki: "  + str( self.new_track.track_len ) + str( self.new_track.moves ) ).place( x = 40, y = 80 )
-        label = Label( popup, text = "Wprowadź nazwę ścieżki:" ).place( x = 40, y = 110 )
-        input_box = Entry( popup ).place( x = 40, y = 140 ) 
-
-        button_save =  Button( popup, text = "Zapisz", command = lambda : self.new_track.accept_track( label.get() )).place( x = 40, y = 240 )
-        button_close = Button( popup, text = "Anuluj", command = self.new_track.cancel_track_creating ).place( x = 140, y = 240 )
-
     def run( self ):
         mainloop()
 
