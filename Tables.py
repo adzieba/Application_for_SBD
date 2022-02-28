@@ -24,6 +24,7 @@ class Table( Button ):
         super().__init__( self.frame )
         self.config( relief = FLAT, borderwidth = 0 )        
         self.pack( fill = BOTH, expand = 1 )
+        self.menu = None
 
 class DemouldingTable( Table ):
 
@@ -42,14 +43,18 @@ class DemouldingTable( Table ):
         self.bind( '<Button-3>', self.showMenu )
 
     def showMenu( self, event ):
-        menu = Menu( self.gui.visualization_background, tearoff = 0 )
-        menu.add_command( label = "Wezwij płytę", command = None )
-        menu.add_separator()
-        menu.add_command( label = "Wyślij płytę", command = None )        
-        menu.add_radiobutton( label = 'A', var = self.sendvalue, value = 0 )      
-        menu.add_radiobutton( label = 'B', var = self.sendvalue, value = 1 )      
-        menu.add_radiobutton( label = 'C', var = self.sendvalue, value = 2 ) 
-        menu.tk_popup( event.x_root, event.y_root )
+
+        if self.menu != None:
+            self.menu.destroy()
+
+        self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
+        self.menu.add_command( label = "Wezwij płytę", command = None )
+        self.menu.add_separator()
+        self.menu.add_command( label = "Wyślij płytę", command = None )        
+        self.menu.add_radiobutton( label = 'A', var = self.sendvalue, value = 0 )      
+        self.menu.add_radiobutton( label = 'B', var = self.sendvalue, value = 1 )      
+        self.menu.add_radiobutton( label = 'C', var = self.sendvalue, value = 2 ) 
+        self.menu.tk_popup( event.x_root, event.y_root )
 
 class MouldingTable( Table ):
 
@@ -68,14 +73,18 @@ class MouldingTable( Table ):
         self.bind( '<Button-3>', self.showMenu )
 
     def showMenu( self, event ):
-        menu = Menu( self.gui.visualization_background, tearoff = 0 )
-        menu.add_command( label = "Wyślij płytę", command = None )
-        menu.add_separator()
-        menu.add_command( label = "Wezwij płytę", command = None ) 
-        menu.add_radiobutton( label = 'A', var = self.callvalue, value = 0 )      
-        menu.add_radiobutton( label = 'B', var = self.callvalue, value = 1 )      
-        menu.add_radiobutton( label = 'C', var = self.callvalue, value = 2 ) 
-        menu.tk_popup( event.x_root, event.y_root )
+
+        if self.menu != None:
+            self.menu.destroy()
+
+        self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
+        self.menu.add_command( label = "Wyślij płytę", command = None )
+        self.menu.add_separator()
+        self.menu.add_command( label = "Wezwij płytę", command = None ) 
+        self.menu.add_radiobutton( label = 'A', var = self.callvalue, value = 0 )      
+        self.menu.add_radiobutton( label = 'B', var = self.callvalue, value = 1 )      
+        self.menu.add_radiobutton( label = 'C', var = self.callvalue, value = 2 ) 
+        self.menu.tk_popup( event.x_root, event.y_root )
 
 class ComposingTable( Table ):
 
@@ -95,9 +104,13 @@ class ComposingTable( Table ):
         self.gui.composing_tables.append( self )
 
     def showMenu( self, event ):
-        menu = Menu( self.gui.visualization_background, tearoff = 0 )
-        menu.add_command( label = "Nowa płyta", command = self.startNewPlate )
-        menu.tk_popup( event.x_root, event.y_root )
+
+        if self.menu != None:
+            self.menu.destroy()
+
+        self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
+        self.menu.add_command( label = "Nowa płyta", command = self.startNewPlate )
+        self.menu.tk_popup( event.x_root, event.y_root )
 
     def startNewPlate( self ):
         plate = Plate( self )
@@ -111,9 +124,13 @@ class TurnTable( Table ):
         self.bind( '<Button-3>', self.showMenu )
 
     def showMenu( self, event ):
-        menu = Menu( self.gui.visualization_background, tearoff = 0 )
-        menu.add_command( label = "Obróć stół", command = self.turnTable )
-        menu.tk_popup( event.x_root, event.y_root )
+
+        if self.menu != None:
+            self.menu.destroy()
+
+        self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
+        self.menu.add_command( label = "Obróć stół", command = self.turnTable )
+        self.menu.tk_popup( event.x_root, event.y_root )
 
     def turnTable( self ):
         

@@ -1,4 +1,5 @@
 from tkinter import *
+import os, sys, json
 
 class Track():
 
@@ -52,7 +53,23 @@ class Track():
         button_close = Button( popup, text = "Anuluj", command = lambda : self.popupCancelButton( popup )).place( x = 90,  y = 240 )
 
     def popupSaveButton( self, widget, track_name ):
-        print( track_name )
+
+        with open( os.path.join( sys.path[0], "config.json" ), 'r') as infile:
+            config_file = json.load( infile )
+
+        if not 'paths' in config_file['tables']['objects'][self.start_table.name]:
+            config_file['tables']['objects'][self.start_table.name]['paths'] = {}
+ 
+        config_file['tables']['objects'][self.start_table.name]['paths'][track_name] = {}
+        config_file['tables']['objects'][self.start_table.name]['paths'][track_name]['moves'] = self.moves
+        config_file['tables']['objects'][self.start_table.name]['paths'][track_name]['destination'] = {}
+        config_file['tables']['objects'][self.start_table.name]['paths'][track_name]['destination']['name'] = self.end_table.name
+        config_file['tables']['objects'][self.start_table.name]['paths'][track_name]['destination']['x'] = self.end_table.x_index
+        config_file['tables']['objects'][self.start_table.name]['paths'][track_name]['destination']['y'] = self.end_table.y_index
+
+        with open( os.path.join( sys.path[0], "config.json" ), 'w') as outfile:
+            json.dump( config_file, outfile, indent = 4 )
+
         self.cancelTrack()
         widget.destroy()
     

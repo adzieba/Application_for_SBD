@@ -21,7 +21,7 @@ class Plate( Button ):
         self.y_index = self.table.y_index
         self.x_pos   = self.table.x_pos
         self.y_pos   = self.table.y_pos
-
+    
         self.frame = Frame( self.gui.visualization_background, height = self.gui.tile_height, width = self.gui.tile_width )
         self.frame.pack_propagate( 0 )
         self.frame.place( x = self.x_pos, y = self.y_pos )
@@ -38,9 +38,10 @@ class Plate( Button ):
         self.bind('<Left>',     lambda event: self.movePlate( 'left' ))
         self.bind('<Right>',    lambda event: self.movePlate( 'right' ))
         self.pack( fill = BOTH, expand = 1 )
-        #self.gui.plate_list.append( self )
+        
         self.focus_set()
         self.gui.selected_plate = self
+        self.menu = None
 
         self.moving_auto = False
 
@@ -49,36 +50,45 @@ class Plate( Button ):
 
     def showPlateMenu( self, event ):
 
+        if self.menu != None:
+            self.menu.destroy()
+
         if self.gui.selected_plate == self:
 
+            print( "powiązanych referencji: ", sys.getrefcount( self ) )
+
             if self.gui.track_creating_active:
-                menu = Menu( self.gui.visualization_background, tearoff = 0 )
-                menu.add_command( label = "Ścieżka - góra",  command = lambda: self.movePlate( 'up' ))
-                menu.add_command( label = "Ścieżka - dół ",  command = lambda: self.movePlate( 'down' ))
-                menu.add_command( label = "Ścieżka - lewo",  command = lambda: self.movePlate( 'left' ))
-                menu.add_command( label = "Ścieżka - prawo", command = lambda: self.movePlate( 'right' ))
-                menu.add_command( label = "GC", command = self.showGC )
-                menu.add_separator()
-                menu.add_command( label = "Zaakceptuj ścieżkę ", command = lambda: self.gui.new_track.acceptTrack( self.table )) 
-                menu.add_command( label = "Anuluj ścieżkę ",     command = lambda: self.gui.new_track.cancelTrack() )
-                menu.tk_popup( event.x_root, event.y_root )
+                self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
+                self.menu.add_command( label = "Ścieżka - góra",  command = lambda: self.movePlate( 'up' ))
+                self.menu.add_command( label = "Ścieżka - dół ",  command = lambda: self.movePlate( 'down' ))
+                self.menu.add_command( label = "Ścieżka - lewo",  command = lambda: self.movePlate( 'left' ))
+                self.menu.add_command( label = "Ścieżka - prawo", command = lambda: self.movePlate( 'right' ))
+                self.menu.add_separator()
+                self.menu.add_command( label = "Zaakceptuj ścieżkę ", command = lambda: self.gui.new_track.acceptTrack( self.table )) 
+                self.menu.add_command( label = "Anuluj ścieżkę ",     command = lambda: self.gui.new_track.cancelTrack() )
+                self.menu.tk_popup( event.x_root, event.y_root )
             else:
                 # ppm plate
-                menu = Menu( self.gui.visualization_background, tearoff = 0 )
-                menu.add_command( label = "Idź - góra",  command = lambda: self.movePlate( 'up' ))
-                menu.add_command( label = "Idź - dół ",  command = lambda: self.movePlate( 'down' ))
-                menu.add_command( label = "Idź - lewo",  command = lambda: self.movePlate( 'left' ))
-                menu.add_command( label = "Idź - prawo", command = lambda: self.movePlate( 'right' ))
-                menu.add_command( label = "GC", command = self.showGC )
-                menu.add_separator()
-                menu.add_command( label = "Zacznij rysować ścieżkę ", command = self.newTrackForPlate )
-                menu.add_separator()
-                menu.add_command( label = "Usuń płytę", command = self.deletePlate )
-                menu.tk_popup( event.x_root, event.y_root )
+                self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
+                self.menu.add_command( label = "Idź - góra",  command = lambda: self.movePlate( 'up' ))
+                self.menu.add_command( label = "Idź - dół ",  command = lambda: self.movePlate( 'down' ))
+                self.menu.add_command( label = "Idź - lewo",  command = lambda: self.movePlate( 'left' ))
+                self.menu.add_command( label = "Idź - prawo", command = lambda: self.movePlate( 'right' ))
+                
+                with open( os.path.join( sys.path[0], "config.json" ), 'r') as infile:
+                    config_file = json.load( infile )
 
-    def showGC( self ):
-        print( gc.get_referrers( self ))
-        
+                if 'paths' in config_file['tables']['objects'][self.table.name]:
+                    self.menu.add_separator()
+                    for path in config_file['tables']['objects'][self.table.name]['paths']:
+                        self.menu.add_command( label = str( path ),  command = lambda: self.movePlate( 'up' ))
+
+                self.menu.add_separator()
+                self.menu.add_command( label = "Zacznij rysować ścieżkę ", command = self.newTrackForPlate )
+                self.menu.add_separator()
+                self.menu.add_command( label = "Usuń płytę", command = self.deletePlate )
+                self.menu.tk_popup( event.x_root, event.y_root )
+
     def newTrackForPlate( self ):
         self.selectPlate()
         self.gui.new_track = None
@@ -87,11 +97,8 @@ class Plate( Button ):
     def deletePlate( self ):
         self.table.plate_on_table = False
         self.gui.selected_plate = None
-        #self.frame.destroy()
-        #super().destroy()
-        #self.destroy()
-        #self.gui.plate_list.remove( self )
-        #print( sys.getrefcount( self ) )
+        self.frame.destroy()
+        self.menu.destroy()
         
     def selectPlate( self ):
 
