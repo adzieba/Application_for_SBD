@@ -20,9 +20,6 @@ class SBD_Application():
         self.plate_list   = []
         self.tables_list  = []
         self.table_images = []
-        self.composing_tables = []
-        self.tracks = []
-        self.table_objects_scheme = []
         self.table_graphics = [ 
             "plate.png",         #0
             "conveyor_h.png",    #1

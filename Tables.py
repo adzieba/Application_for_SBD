@@ -3,7 +3,7 @@ from Plates import *
 from PIL     import ImageTk, Image
 import sys, os, json
 
-class Table( Button ):
+class Table():
 
     def __init__( self, gui, type, move_directions, x_index, y_index, name ):
         self.gui = gui
@@ -15,19 +15,21 @@ class Table( Button ):
         self.y_pos = self.y_index * self.gui.tile_height
         self.tile_x_center = self.x_pos + self.gui.tile_width  / 2
         self.tile_y_center = self.y_pos + self.gui.tile_height / 2
+
         self.label = None
         self.plate_on_table = False
         self.callvalue = 0
         self.sendvalue = 0
+        self.menu = None
+
         self.frame = Frame( self.gui.visualization_background, height = self.gui.tile_height, width = self.gui.tile_width )
         self.frame.pack_propagate( 0 )
         self.frame.place( x = self.x_pos, y = self.y_pos )
-        super().__init__( self.frame )
-        self.config( relief = FLAT, borderwidth = 0 )        
-        self.pack( fill = BOTH, expand = 1 )
-        self.menu = None
-
-    def getPaths( self ):
+        
+        self.framebackground = Label( self.frame )
+        self.framebackground.pack( fill = BOTH )
+   
+    def getPaths( self, mode ):
 
         with open( os.path.join( sys.path[0], "config.json" ), 'r') as infile:
             config_file = json.load( infile ) 
@@ -37,8 +39,21 @@ class Table( Button ):
                 paths = {}
                 
                 for path in config_file['tables']['objects'][self.name]['paths']:
-                    paths[ path ] = config_file['tables']['objects'][self.name]['paths'][path]
-                
+
+                    destination_table_x = config_file['tables']['objects'][self.name]['paths'][path]['destination']['x']
+                    destination_table_y = config_file['tables']['objects'][self.name]['paths'][path]['destination']['y']
+                    
+                    if mode == 0:
+                        if self.gui.tables_list[destination_table_y][ destination_table_x].plate_on_table:
+                            paths[ path ] = config_file['tables']['objects'][self.name]['paths'][path]
+
+                    elif mode == 1:
+                        if not self.gui.tables_list[destination_table_y][ destination_table_x].plate_on_table:
+                            paths[ path ] = config_file['tables']['objects'][self.name]['paths'][path]
+
+                    elif mode == 2:
+                        paths[ path ] = config_file['tables']['objects'][self.name]['paths'][path]
+
                 return paths
 
             else:
@@ -60,113 +75,137 @@ class Table( Button ):
 
 class DemouldingTable( Table ):
 
-    def __init__(self, gui, type, move_directions, x_index, y_index, name ):
-        super().__init__(gui, type, move_directions, x_index, y_index, name )
+    def __init__( self, gui, type, move_directions, x_index, y_index, name ):
+        super().__init__( gui, type, move_directions, x_index, y_index, name )
 
         if 'right' in self.move_directions: 
-            self["image"] = self.gui.table_images[2]
+            self.framebackground["image"] = self.gui.table_images[2]
         elif 'left' in self.move_directions:
-            self["image"] = self.gui.table_images[5]
+            self.framebackground["image"] = self.gui.table_images[5]
         elif 'up' in self.move_directions:
-            self["image"] = self.gui.table_images[6]
+            self.framebackground["image"] = self.gui.table_images[6]
         elif 'down' in self.move_directions:
-            self["image"] = self.gui.table_images[7]
+            self.framebackground["image"] = self.gui.table_images[7]
 
-        self.bind( '<Button-3>', self.showMenu )
+        self.framebackground.bind( '<Button-3>', self.showMenu )
 
     def showMenu( self, event ):
 
-        paths = self.getPaths() 
-
         if self.menu != None:
             self.menu.destroy()
+        
+        paths = self.getPaths( 0 ) 
 
         self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
-        self.menu.add_command( label = "Zbierz formy", command = None )
+        #self.menu.add_command( label = "Zbierz formy", command = None )
         
-        if paths :
-            self.menu.add_separator()
-
+        if paths:
+           
             for path in paths:
                 sub_menu = Menu( self.menu, tearoff = 0 )
-                sub_menu.add_command(  label = "Wyślij", command = None ) 
+                sub_menu.add_command(  label = "Przywołaj", command = None ) 
+                self.menu.add_cascade( label = str( path ),  menu = sub_menu )  
+
+        paths2 = self.getPaths( 2 )
+
+        if paths2:   
+            self.menu.add_separator()
+
+            for path in paths2:
+                sub_menu = Menu( self.menu, tearoff = 0 )
                 sub_menu.add_command(  label = "Usuń",   command = lambda: self.deletePath( path ) )
-                self.menu.add_cascade( label = str( path ),  menu = sub_menu )     
+                self.menu.add_cascade( label = str( path ),  menu = sub_menu )  
 
         self.menu.tk_popup( event.x_root, event.y_root )
 
 class MouldingTable( Table ):
 
-    def __init__(self, gui, type, move_directions, x_index, y_index, name ):
-        super().__init__(gui, type, move_directions, x_index, y_index, name )
+    def __init__( self, gui, type, move_directions, x_index, y_index, name ):
+        super().__init__( gui, type, move_directions, x_index, y_index, name )
         
         if 'right' in self.move_directions: 
-            self["image"] = self.gui.table_images[2]
+            self.framebackground["image"] = self.gui.table_images[2]
         elif 'left' in self.move_directions:
-            self["image"] = self.gui.table_images[5]
+            self.framebackground["image"] = self.gui.table_images[5]
         elif 'up' in self.move_directions:
-            self["image"] = self.gui.table_images[6]
+            self.framebackground["image"] = self.gui.table_images[6]
         elif 'down' in self.move_directions:
-            self["image"] = self.gui.table_images[7]  
+            self.framebackground["image"] = self.gui.table_images[7]  
 
-        self.bind( '<Button-3>', self.showMenu )
+        self.framebackground.bind( '<Button-3>', self.showMenu )
 
     def showMenu( self, event ):
-
-        paths = self.getPaths() 
 
         if self.menu != None:
             self.menu.destroy()
 
         self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
-        self.menu.add_command( label = "Wypełnij formy", command = None )
+        #self.menu.add_command( label = "Wypełnij formy", command = None )
+        
+        paths = self.getPaths( 0 ) 
         
         if paths :
-            self.menu.add_separator()
-
+            
             for path in paths:
                 sub_menu = Menu( self.menu, tearoff = 0 )
-                sub_menu.add_command( label = "Wyślij", command = None) 
-                sub_menu.add_command( label = "Usuń",   command = lambda: self.deletePath( path ) )
+                sub_menu.add_command( label = "Przywołaj", command = None) 
                 self.menu.add_cascade( label = str( path ),  menu = sub_menu )     
+
+        paths2 = self.getPaths( 2 )
+
+        if paths2:   
+            self.menu.add_separator()
+
+            for path in paths2:
+                sub_menu = Menu( self.menu, tearoff = 0 )
+                sub_menu.add_command(  label = "Usuń",   command = lambda: self.deletePath( path ) )
+                self.menu.add_cascade( label = str( path ),  menu = sub_menu )  
 
         self.menu.tk_popup( event.x_root, event.y_root )
 
 class ComposingTable( Table ):
 
-    def __init__(self, gui, type, move_directions, x_index, y_index, name ):
-        super().__init__(gui, type, move_directions, x_index, y_index, name )
+    def __init__( self, gui, type, move_directions, x_index, y_index, name ):
+        super().__init__( gui, type, move_directions, x_index, y_index, name )
     
         if 'right' in self.move_directions: 
-            self["image"] = self.gui.table_images[2]
+            self.framebackground["image"] = self.gui.table_images[2]
         elif 'left' in self.move_directions:
-            self["image"] = self.gui.table_images[5]
+            self.framebackground["image"] = self.gui.table_images[5]
         elif 'up' in self.move_directions:
-            self["image"] = self.gui.table_images[6]
+            self.framebackground["image"] = self.gui.table_images[6]
         elif 'down' in self.move_directions:
-            self["image"] = self.gui.table_images[7]
+            self.framebackground["image"] = self.gui.table_images[7]
 
-        self.bind( '<Button-3>', self.showMenu )
-        self.gui.composing_tables.append( self )
-
+        self.framebackground.bind( '<Button-3>', self.showMenu )
+        
     def showMenu( self, event ):
 
-        paths = self.getPaths() 
-        
         if self.menu != None:
             self.menu.destroy()
 
         self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
         self.menu.add_command( label = "Nowa płyta", command = self.startNewPlate )
         
+        paths = self.getPaths( 0 ) 
+        
         if paths :
             self.menu.add_separator()
 
             for path in paths:
                 sub_menu = Menu( self.menu, tearoff = 0 )
-                sub_menu.add_command( label = "Wyślij", command = None)
-                sub_menu.add_command( label = "Usuń",   command = lambda: self.deletePath( path ) )
+                sub_menu.add_command( label = "Przywołaj", command = None)
                 self.menu.add_cascade( label = str( path ),  menu = sub_menu )     
+
+        paths2 = self.getPaths( 2 )
+
+        if paths2:   
+            self.menu.add_separator()
+
+            for path in paths2:
+                sub_menu = Menu( self.menu, tearoff = 0 )
+                sub_menu.add_command(  label = "Usuń",   command = lambda: self.deletePath( path ) )
+                self.menu.add_cascade( label = str( path ),  menu = sub_menu )  
 
         self.menu.tk_popup( event.x_root, event.y_root )
 
@@ -175,49 +214,58 @@ class ComposingTable( Table ):
 
 class TurnTable( Table ):
 
-    def __init__(self, gui, type, move_directions, x_index, y_index, name ):
-        super().__init__(gui, type, move_directions, x_index, y_index, name )
+    def __init__( self, gui, type, move_directions, x_index, y_index, name ):
+        super().__init__( gui, type, move_directions, x_index, y_index, name )
         self.position = "horizontal"
-        self["image"] = self.gui.table_images[3]
-        self.bind( '<Button-3>', self.showMenu )
+        self.framebackground["image"] = self.gui.table_images[3]
+        self.framebackground.bind( '<Button-3>', self.showMenu )
 
     def showMenu( self, event ):
 
-        paths = self.getPaths() 
-
         if self.menu != None:
             self.menu.destroy()
-
+        
         self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
         self.menu.add_command( label = "Obróć stół", command = self.turnTable )
+
+        paths = self.getPaths( 0 ) 
 
         if paths :
             self.menu.add_separator()
 
             for path in paths:
                 sub_menu = Menu( self.menu, tearoff = 0 )
-                sub_menu.add_command( label = "Wyślij", command = None)
-                sub_menu.add_command( label = "Usuń",   command = lambda: self.deletePath( path ) )
+                sub_menu.add_command( label = "Przywołaj", command = None)
                 self.menu.add_cascade( label = str( path ),  menu = sub_menu )     
+
+        paths2 = self.getPaths( 2 )
+
+        if paths2:   
+            self.menu.add_separator()
+
+            for path in paths2:
+                sub_menu = Menu( self.menu, tearoff = 0 )
+                sub_menu.add_command(  label = "Usuń",   command = lambda: self.deletePath( path ) )
+                self.menu.add_cascade( label = str( path ),  menu = sub_menu )  
 
         self.menu.tk_popup( event.x_root, event.y_root )
 
     def turnTable( self ):
         
         if self.position == "horizontal":
-            self["image"] = self.gui.table_images[8]
+            self.framebackground["image"] = self.gui.table_images[8]
             self.position = "vertical"
         elif self.position == "vertical":
-            self["image"] = self.gui.table_images[3]
+            self.framebackground["image"] = self.gui.table_images[3]
             self.position = "horizontal"
 
 class ConveyorTable( Table ):
 
-    def __init__(self, gui, type, move_directions, x_index, y_index, name ):
-        super().__init__(gui, type, move_directions, x_index, y_index, name )
+    def __init__( self, gui, type, move_directions, x_index, y_index, name ):
+        super().__init__( gui, type, move_directions, x_index, y_index, name )
 
         if type == "|":
-            self["image"] = self.gui.table_images[4]
+            self.framebackground["image"] = self.gui.table_images[4]
             
         elif type == "-":
-            self["image"] = self.gui.table_images[1]
+            self.framebackground["image"] = self.gui.table_images[1]

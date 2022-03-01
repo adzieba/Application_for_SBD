@@ -26,31 +26,23 @@ class Plate():
     
         self.frame = Frame( self.gui.visualization_background, height = self.gui.tile_height, width = self.gui.tile_width )
         self.frame.pack_propagate( 0 )
-        #self.frame.place( x = self.x_pos, y = self.y_pos )
-        
-        #super().__init__( self.frame )
-               
-        #self["image"] = self.gui.table_images[0]
-        #self["border"] = 0
-        #self.config( relief = FLAT, borderwidth = 0 )
-
-        self.frame.bind('<Button-1>', lambda event: self.selectPlate())
-        self.frame.bind('<Button-3>', self.showPlateMenu )
-        self.frame.bind('<Up>',       lambda event: self.movePlate( 'up' ))
-        self.frame.bind('<Down>',     lambda event: self.movePlate( 'down' ))
-        self.frame.bind('<Left>',     lambda event: self.movePlate( 'left' ))
-        self.frame.bind('<Right>',    lambda event: self.movePlate( 'right' ))
         self.frame.place( x = self.x_pos, y = self.y_pos )
-        #self.frame.pack( fill = BOTH, expand = 1 )
         
-        #self.framebackground = Label( self.frame, image = self.gui.table_images[0], text = 'hello' )
-        self.framebackground = Label( self.frame,  text = 'hello' )
-        self.framebackground.pack( fill = BOTH ) #, expand = 1 )
+        self.framebackground = Label( self.frame, image = self.gui.table_images[0] )
+        self.framebackground.pack( fill = BOTH )
+        self.framebackground.bind('<Button-1>', lambda event: self.selectPlate())
+        self.framebackground.bind('<Button-3>', self.showPlateMenu )
+        self.framebackground.bind('<Up>',       lambda event: self.movePlate( 'up' ))
+        self.framebackground.bind('<Down>',     lambda event: self.movePlate( 'down' ))
+        self.framebackground.bind('<Left>',     lambda event: self.movePlate( 'left' ))
+        self.framebackground.bind('<Right>',    lambda event: self.movePlate( 'right' ))
 
-        self.label = Label( self.frame, text = 'numerek' )
-        self.label.pack()
-
-        self.frame.focus_set()
+        self.label = Label( self.frame, height = 1, width=2, text = '123', bg='grey')
+        self.label.place( relx = 0.05, rely = 0.05 )
+        self.label.bind('<Button-1>', lambda event: self.selectPlate())
+        self.label.bind('<Button-3>', self.showPlateMenu )
+        
+        self.framebackground.focus_set( )
         self.gui.selected_plate = self
         self.menu = None
         self.moving_auto = False
@@ -64,8 +56,6 @@ class Plate():
             self.menu.destroy()
 
         if self.gui.selected_plate == self:
-
-            print( "powiązanych referencji: ", sys.getrefcount( self ) )
 
             if self.gui.track_creating_active:
                 self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
@@ -85,7 +75,7 @@ class Plate():
                 self.menu.add_command( label = "Idź - lewo",  command = lambda: self.movePlate( 'left' ))
                 self.menu.add_command( label = "Idź - prawo", command = lambda: self.movePlate( 'right' ))
 
-                paths = self.table.getPaths()            
+                paths = self.table.getPaths( 1 )            
 
                 if paths:
                     self.menu.add_separator()
@@ -115,7 +105,7 @@ class Plate():
     def selectPlate( self ):
 
         if not self.gui.track_creating_active:
-            self.focus_set()
+            self.framebackground.focus_set()
             self.gui.selected_plate = self
           
     def plate_move_auto( self ): 
@@ -149,71 +139,84 @@ class Plate():
                 if 'down' in next_table.move_directions:
                     next_turntable_need_turn = is_nexttable_turntable and next_table.position == "horizontal" 
                    
-                    if isinstance( self.table, Tables.TurnTable ):
-                        
-                        if self.table.position == "horizontal":
-                            self.table.turnTable()
-                        else:
+                    if not next_table.plate_on_table:
 
-                            if not next_table.plate_on_table:
-                                move_allowed = self.movePlateUp()
+                        if not self.gui.track_creating_active:
 
-                    else:
-                        
-                        if not next_table.plate_on_table:
-                            
-                            if next_turntable_need_turn:
-                                next_table.turnTable()
+                            if isinstance( self.table, Tables.TurnTable ):
+                                
+                                if self.table.position == "horizontal":
+                                    self.table.turnTable()
+                                else:
+                                    move_allowed = self.movePlateUp()
+
                             else:
-                                move_allowed = self.movePlateUp()
+
+                                if next_turntable_need_turn:
+                                    next_table.turnTable()
+                                else:
+                                    move_allowed = self.movePlateUp()
+
+                        else:
+                            move_allowed = self.movePlateUp()                
+
 
             elif direction == 'down':
                 next_table = self.gui.tables_list[ self.y_index + 1 ][ self.x_index ]
                 is_nexttable_turntable = isinstance( next_table, Tables.TurnTable )
 
                 if 'up' in next_table.move_directions:
-                    next_turntable_need_turn = ( is_nexttable_turntable and next_table.position == "horizontal" )
+                    next_turntable_need_turn = is_nexttable_turntable and next_table.position == "horizontal" 
                     
-                    if isinstance( self.table, Tables.TurnTable ):
+                    if not next_table.plate_on_table:
 
-                        if self.table.position == "horizontal":
-                            self.table.turnTable()
-                        else:
+                        if not self.gui.track_creating_active:
 
-                            if not next_table.plate_on_table:
-                                move_allowed = self.movePlateDown()
+                            if isinstance( self.table, Tables.TurnTable ):
 
-                    else:
-                        if not next_table.plate_on_table:
+                                if self.table.position == "horizontal":
+                                    self.table.turnTable()
+                                else:
+                                    move_allowed = self.movePlateDown()
 
-                            if next_turntable_need_turn:
-                                next_table.turnTable()
                             else:
-                                move_allowed = self.movePlateDown()
+
+                                if next_turntable_need_turn: 
+                                    next_table.turnTable()
+                                else:
+                                    move_allowed = self.movePlateDown()
+
+                        else:
+                            move_allowed = self.movePlateDown()
 
             elif direction == 'left':
                 next_table = self.gui.tables_list[ self.y_index ][ self.x_index - 1 ]
                 is_nexttable_turntable = isinstance( next_table, Tables.TurnTable )
 
                 if 'right' in next_table.move_directions:
-                    next_turntable_need_turn = ( is_nexttable_turntable and next_table.position == "vertical" )
+                    next_turntable_need_turn = is_nexttable_turntable and next_table.position == "vertical" 
                     
-                    if isinstance( self.table, Tables.TurnTable ):
-                        
-                        if self.table.position == "vertical":
-                            self.table.turnTable()
-                        else:
+                    if not next_table.plate_on_table:
 
-                            if not next_table.plate_on_table:
-                                move_allowed = self.movePlateLeft()
+                        if not self.gui.track_creating_active:
 
-                    else:
+                            if isinstance( self.table, Tables.TurnTable ):
+                                
+                                if self.table.position == "vertical":
+                                    self.table.turnTable()
+                                else:
+                                    move_allowed = self.movePlateLeft()
 
-                        if not next_table.plate_on_table:
-                            if next_turntable_need_turn:
-                                next_table.turnTable()
                             else:
-                                move_allowed = self.movePlateLeft()
+
+                                if next_turntable_need_turn:
+                                    next_table.turnTable()
+                                else:
+                                    move_allowed = self.movePlateLeft()
+
+                        else:
+                            move_allowed = self.movePlateLeft()
+
 
             elif direction == 'right':
                 next_table = self.gui.tables_list[ self.y_index ][ self.x_index + 1 ]
@@ -222,23 +225,26 @@ class Plate():
                 if 'left' in next_table.move_directions:
                     next_turntable_need_turn = ( is_nexttable_turntable and next_table.position == "vertical" )
                     
-                    if isinstance( self.table, Tables.TurnTable ):
+                    if not next_table.plate_on_table:
 
-                        if self.table.position == "vertical":
-                            self.table.turnTable()
-                        else:
+                        if not self.gui.track_creating_active:
 
-                            if not next_table.plate_on_table:
-                                move_allowed = self.movePlateRight()
+                            if isinstance( self.table, Tables.TurnTable ):
 
-                    else:
+                                if self.table.position == "vertical":
+                                    self.table.turnTable()
+                                else:
+                                    move_allowed = self.movePlateRight()
 
-                        if not next_table.plate_on_table:
-                            
-                            if next_turntable_need_turn:
-                                next_table.turnTable()
                             else:
-                                move_allowed = self.movePlateRight()
+                               
+                                if next_turntable_need_turn :
+                                    next_table.turnTable()
+                                else:
+                                    move_allowed = self.movePlateRight()
+
+                        else:
+                            move_allowed = self.movePlateRight()
 
             if move_allowed:
                 self.table.plate_on_table = False
