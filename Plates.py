@@ -1,3 +1,4 @@
+import imghdr
 from tkinter import *
 from PIL     import ImageTk, Image
 import threading
@@ -8,9 +9,10 @@ from SBD_Applications import *
 from threading_task_class import *
 from Tracks import *
 from random import randint
-import gc, sys
+import sys
 
-class Plate( Button ):
+#class Plate( Button ):
+class Plate():
 
     def __init__( self, table ):
         print("plyta - poczatek")
@@ -24,25 +26,33 @@ class Plate( Button ):
     
         self.frame = Frame( self.gui.visualization_background, height = self.gui.tile_height, width = self.gui.tile_width )
         self.frame.pack_propagate( 0 )
-        self.frame.place( x = self.x_pos, y = self.y_pos )
-        super().__init__( self.frame )
+        #self.frame.place( x = self.x_pos, y = self.y_pos )
         
-        self["image"] = self.gui.table_images[0]
-        self["border"] = 0
-        self.config( relief = SUNKEN )
+        #super().__init__( self.frame )
+               
+        #self["image"] = self.gui.table_images[0]
+        #self["border"] = 0
+        #self.config( relief = FLAT, borderwidth = 0 )
 
-        self.bind('<Button-1>', lambda event: self.selectPlate())
-        self.bind('<Button-3>', self.showPlateMenu )
-        self.bind('<Up>',       lambda event: self.movePlate( 'up' ))
-        self.bind('<Down>',     lambda event: self.movePlate( 'down' ))
-        self.bind('<Left>',     lambda event: self.movePlate( 'left' ))
-        self.bind('<Right>',    lambda event: self.movePlate( 'right' ))
-        self.pack( fill = BOTH, expand = 1 )
+        self.frame.bind('<Button-1>', lambda event: self.selectPlate())
+        self.frame.bind('<Button-3>', self.showPlateMenu )
+        self.frame.bind('<Up>',       lambda event: self.movePlate( 'up' ))
+        self.frame.bind('<Down>',     lambda event: self.movePlate( 'down' ))
+        self.frame.bind('<Left>',     lambda event: self.movePlate( 'left' ))
+        self.frame.bind('<Right>',    lambda event: self.movePlate( 'right' ))
+        self.frame.place( x = self.x_pos, y = self.y_pos )
+        #self.frame.pack( fill = BOTH, expand = 1 )
         
-        self.focus_set()
+        #self.framebackground = Label( self.frame, image = self.gui.table_images[0], text = 'hello' )
+        self.framebackground = Label( self.frame,  text = 'hello' )
+        self.framebackground.pack( fill = BOTH ) #, expand = 1 )
+
+        self.label = Label( self.frame, text = 'numerek' )
+        self.label.pack()
+
+        self.frame.focus_set()
         self.gui.selected_plate = self
         self.menu = None
-
         self.moving_auto = False
 
     def __del__( self ):
@@ -74,14 +84,16 @@ class Plate( Button ):
                 self.menu.add_command( label = "Idź - dół ",  command = lambda: self.movePlate( 'down' ))
                 self.menu.add_command( label = "Idź - lewo",  command = lambda: self.movePlate( 'left' ))
                 self.menu.add_command( label = "Idź - prawo", command = lambda: self.movePlate( 'right' ))
-                
-                with open( os.path.join( sys.path[0], "config.json" ), 'r') as infile:
-                    config_file = json.load( infile )
 
-                if 'paths' in config_file['tables']['objects'][self.table.name]:
+                paths = self.table.getPaths()            
+
+                if paths:
                     self.menu.add_separator()
-                    for path in config_file['tables']['objects'][self.table.name]['paths']:
-                        self.menu.add_command( label = str( path ),  command = lambda: self.movePlate( 'up' ))
+
+                    for path in paths:
+                        sub_menu = Menu( self.menu, tearoff = 0 )
+                        sub_menu.add_command( label = "Wyślij", command = None )
+                        self.menu.add_cascade( label = str( path ),  menu = sub_menu )
 
                 self.menu.add_separator()
                 self.menu.add_command( label = "Zacznij rysować ścieżkę ", command = self.newTrackForPlate )
