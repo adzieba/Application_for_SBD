@@ -170,7 +170,67 @@
                 "move_directions": [
                     "up",
                     "down"
-                ]
+                ],
+                "paths": {
+                    "to m1": {
+                        "moves": [
+                            "down",
+                            "down",
+                            "down",
+                            "down",
+                            "down",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "demoulding38",
+                            "x": 2,
+                            "y": 8
+                        }
+                    },
+                    "to m3": {
+                        "moves": [
+                            "down",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "demoulding10",
+                            "x": 2,
+                            "y": 4
+                        }
+                    },
+                    "to m2": {
+                        "moves": [
+                            "down",
+                            "down",
+                            "down",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "demoulding24",
+                            "x": 2,
+                            "y": 6
+                        }
+                    },
+                    "to c1": {
+                        "moves": [
+                            "down",
+                            "down",
+                            "down",
+                            "down",
+                            "down",
+                            "down",
+                            "down"
+                        ],
+                        "destination": {
+                            "name": "composing52",
+                            "x": 4,
+                            "y": 10
+                        }
+                    }
+                }
             },
             "conveyor_v9": {
                 "type": "|",
@@ -189,7 +249,7 @@
                     "right"
                 ],
                 "paths": {
-                    "m3 to c1": {
+                    "to d1conv": {
                         "moves": [
                             "right",
                             "right",
@@ -208,6 +268,23 @@
                             "name": "conveyor_h46",
                             "x": 10,
                             "y": 8
+                        }
+                    },
+                    "to c1": {
+                        "moves": [
+                            "right",
+                            "right",
+                            "down",
+                            "down",
+                            "down",
+                            "down",
+                            "down",
+                            "down"
+                        ],
+                        "destination": {
+                            "name": "composing52",
+                            "x": 4,
+                            "y": 10
                         }
                     }
                 }
@@ -239,7 +316,67 @@
                 "move_directions": [
                     "left",
                     "right"
-                ]
+                ],
+                "paths": {
+                    "to m1": {
+                        "moves": [
+                            "left",
+                            "down",
+                            "down",
+                            "down",
+                            "down",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "demoulding38",
+                            "x": 2,
+                            "y": 8
+                        }
+                    },
+                    "to m3": {
+                        "moves": [
+                            "left",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "demoulding10",
+                            "x": 2,
+                            "y": 4
+                        }
+                    },
+                    "to m2": {
+                        "moves": [
+                            "left",
+                            "down",
+                            "down",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "demoulding24",
+                            "x": 2,
+                            "y": 6
+                        }
+                    },
+                    "do c1": {
+                        "moves": [
+                            "left",
+                            "down",
+                            "down",
+                            "down",
+                            "down",
+                            "down",
+                            "down"
+                        ],
+                        "destination": {
+                            "name": "composing52",
+                            "x": 4,
+                            "y": 10
+                        }
+                    }
+                }
             },
             "conveyor_h14": {
                 "type": "-",
@@ -312,7 +449,66 @@
                 "y": 4,
                 "move_directions": [
                     "left"
-                ]
+                ],
+                "paths": {
+                    "m2conv": {
+                        "moves": [
+                            "left",
+                            "left",
+                            "down",
+                            "down",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "conveyor_h27",
+                            "x": 5,
+                            "y": 6
+                        }
+                    },
+                    "m3conv": {
+                        "moves": [
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "conveyor_h13",
+                            "x": 5,
+                            "y": 4
+                        }
+                    },
+                    "m3conv2": {
+                        "moves": [
+                            "left",
+                            "left",
+                            "up",
+                            "up",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "down"
+                        ],
+                        "destination": {
+                            "name": "conveyor_v8",
+                            "x": 4,
+                            "y": 3
+                        }
+                    }
+                }
             },
             "conveyor_v22": {
                 "type": "|",
@@ -340,7 +536,7 @@
                     "right"
                 ],
                 "paths": {
-                    "m2 to c1": {
+                    "d1conv": {
                         "moves": [
                             "right",
                             "right",
@@ -357,6 +553,21 @@
                             "name": "conveyor_h46",
                             "x": 10,
                             "y": 8
+                        }
+                    },
+                    "c1": {
+                        "moves": [
+                            "right",
+                            "right",
+                            "down",
+                            "down",
+                            "down",
+                            "down"
+                        ],
+                        "destination": {
+                            "name": "composing52",
+                            "x": 4,
+                            "y": 10
                         }
                     }
                 }
@@ -388,7 +599,63 @@
                 "move_directions": [
                     "left",
                     "right"
-                ]
+                ],
+                "paths": {
+                    "m1": {
+                        "moves": [
+                            "left",
+                            "down",
+                            "down",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "demoulding38",
+                            "x": 2,
+                            "y": 8
+                        }
+                    },
+                    "m2": {
+                        "moves": [
+                            "left",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "demoulding24",
+                            "x": 2,
+                            "y": 6
+                        }
+                    },
+                    "m3": {
+                        "moves": [
+                            "left",
+                            "up",
+                            "up",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "demoulding10",
+                            "x": 2,
+                            "y": 4
+                        }
+                    },
+                    "c1": {
+                        "moves": [
+                            "left",
+                            "down",
+                            "down",
+                            "down",
+                            "down"
+                        ],
+                        "destination": {
+                            "name": "composing52",
+                            "x": 4,
+                            "y": 10
+                        }
+                    }
+                }
             },
             "conveyor_h28": {
                 "type": "-",
@@ -461,7 +728,68 @@
                 "y": 6,
                 "move_directions": [
                     "left"
-                ]
+                ],
+                "paths": {
+                    "d2 to m2conv": {
+                        "moves": [
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "conveyor_h27",
+                            "x": 5,
+                            "y": 6
+                        }
+                    },
+                    "d2 to m3conv": {
+                        "moves": [
+                            "left",
+                            "left",
+                            "up",
+                            "up",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "conveyor_h13",
+                            "x": 5,
+                            "y": 4
+                        }
+                    },
+                    "d2 to m3conv2": {
+                        "moves": [
+                            "left",
+                            "left",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "down"
+                        ],
+                        "destination": {
+                            "name": "conveyor_v8",
+                            "x": 4,
+                            "y": 3
+                        }
+                    }
+                }
             },
             "conveyor_v36": {
                 "type": "|",
@@ -490,6 +818,19 @@
                 ],
                 "paths": {
                     "m1 to c1": {
+                        "moves": [
+                            "right",
+                            "right",
+                            "down",
+                            "down"
+                        ],
+                        "destination": {
+                            "name": "composing52",
+                            "x": 4,
+                            "y": 10
+                        }
+                    },
+                    "m1 to d1conv": {
                         "moves": [
                             "right",
                             "right",
@@ -580,7 +921,51 @@
                 "move_directions": [
                     "left",
                     "right"
-                ]
+                ],
+                "paths": {
+                    "conv1 -> d1": {
+                        "moves": [
+                            "right",
+                            "right",
+                            "right"
+                        ],
+                        "destination": {
+                            "name": "moulding49",
+                            "x": 13,
+                            "y": 8
+                        }
+                    },
+                    "d1conv to d2": {
+                        "moves": [
+                            "right",
+                            "up",
+                            "up",
+                            "right",
+                            "right"
+                        ],
+                        "destination": {
+                            "name": "moulding35",
+                            "x": 13,
+                            "y": 6
+                        }
+                    },
+                    "d1conv to d3": {
+                        "moves": [
+                            "right",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "right",
+                            "right"
+                        ],
+                        "destination": {
+                            "name": "moulding21",
+                            "x": 13,
+                            "y": 4
+                        }
+                    }
+                }
             },
             "turntable47": {
                 "type": "+",
@@ -608,7 +993,74 @@
                 "y": 8,
                 "move_directions": [
                     "left"
-                ]
+                ],
+                "paths": {
+                    "d1 to m2conv": {
+                        "moves": [
+                            "left",
+                            "left",
+                            "up",
+                            "up",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "conveyor_h27",
+                            "x": 5,
+                            "y": 6
+                        }
+                    },
+                    "d1 to m3conv": {
+                        "moves": [
+                            "left",
+                            "left",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "conveyor_h13",
+                            "x": 5,
+                            "y": 4
+                        }
+                    },
+                    "d1 to m3conv2": {
+                        "moves": [
+                            "left",
+                            "left",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "left",
+                            "down"
+                        ],
+                        "destination": {
+                            "name": "conveyor_v8",
+                            "x": 4,
+                            "y": 3
+                        }
+                    }
+                }
             },
             "conveyor_v50": {
                 "type": "|",
@@ -636,26 +1088,6 @@
                     "up"
                 ],
                 "paths": {
-                    "c1 to c2": {
-                        "moves": [
-                            "up",
-                            "up",
-                            "right",
-                            "right",
-                            "right",
-                            "right",
-                            "right",
-                            "right",
-                            "right",
-                            "down",
-                            "down"
-                        ],
-                        "destination": {
-                            "name": "composing53",
-                            "x": 11,
-                            "y": 10
-                        }
-                    },
                     "c1 to m1": {
                         "moves": [
                             "up",
@@ -711,24 +1143,21 @@
                     "up"
                 ],
                 "paths": {
-                    "c2 to c1": {
+                    "c2 to d3": {
                         "moves": [
                             "up",
                             "up",
-                            "left",
-                            "left",
-                            "left",
-                            "left",
-                            "left",
-                            "left",
-                            "left",
-                            "down",
-                            "down"
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "right",
+                            "right"
                         ],
                         "destination": {
-                            "name": "composing52",
-                            "x": 4,
-                            "y": 10
+                            "name": "moulding21",
+                            "x": 13,
+                            "y": 4
                         }
                     }
                 }

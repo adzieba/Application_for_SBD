@@ -73,6 +73,15 @@ class Table():
         with open( os.path.join( sys.path[0], "config.json" ), 'w') as outfile:
             json.dump( config_file, outfile, indent = 4 )
 
+    def setOccupied( self ):
+        self.plate_on_table = True
+
+    def setFree( self ):
+        self.plate_on_table = False
+
+    def isFree( self ):
+        return not self.plate_on_table
+
 class DemouldingTable( Table ):
 
     def __init__( self, gui, type, move_directions, x_index, y_index, name ):
@@ -97,14 +106,15 @@ class DemouldingTable( Table ):
         paths = self.getPaths( 0 ) 
 
         self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
-        #self.menu.add_command( label = "Zbierz formy", command = None )
-        
+                
         if paths:
-           
+            
+            call_menu = Menu( self.menu, tearoff = 0 )
+
             for path in paths:
-                sub_menu = Menu( self.menu, tearoff = 0 )
-                sub_menu.add_command(  label = "Przywołaj", command = None ) 
-                self.menu.add_cascade( label = str( path ),  menu = sub_menu )  
+                call_menu.add_command( label = path, command = None ) 
+                
+            self.menu.add_cascade( label = "Przywołaj z ",  menu = call_menu )
 
         paths2 = self.getPaths( 2 )
 
@@ -113,7 +123,8 @@ class DemouldingTable( Table ):
 
             for path in paths2:
                 sub_menu = Menu( self.menu, tearoff = 0 )
-                sub_menu.add_command(  label = "Usuń",   command = lambda: self.deletePath( path ) )
+                sub_menu.add_command(  label = "Usuń", command = lambda path=path: self.deletePath( path ) )
+                sub_menu.add_command(  label = "Zmień nazwę" )
                 self.menu.add_cascade( label = str( path ),  menu = sub_menu )  
 
         self.menu.tk_popup( event.x_root, event.y_root )
@@ -140,16 +151,17 @@ class MouldingTable( Table ):
             self.menu.destroy()
 
         self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
-        #self.menu.add_command( label = "Wypełnij formy", command = None )
-        
+                
         paths = self.getPaths( 0 ) 
         
-        if paths :
+        if paths:
             
+            call_menu = Menu( self.menu, tearoff = 0 )
+
             for path in paths:
-                sub_menu = Menu( self.menu, tearoff = 0 )
-                sub_menu.add_command( label = "Przywołaj", command = None) 
-                self.menu.add_cascade( label = str( path ),  menu = sub_menu )     
+                call_menu.add_command( label = path, command = None ) 
+                
+            self.menu.add_cascade( label = "Przywołaj z ",  menu = call_menu )   
 
         paths2 = self.getPaths( 2 )
 
@@ -158,7 +170,8 @@ class MouldingTable( Table ):
 
             for path in paths2:
                 sub_menu = Menu( self.menu, tearoff = 0 )
-                sub_menu.add_command(  label = "Usuń",   command = lambda: self.deletePath( path ) )
+                sub_menu.add_command(  label = "Usuń", command = lambda path=path: self.deletePath( path ) )
+                sub_menu.add_command(  label = "Zmień nazwę" )
                 self.menu.add_cascade( label = str( path ),  menu = sub_menu )  
 
         self.menu.tk_popup( event.x_root, event.y_root )
@@ -189,13 +202,14 @@ class ComposingTable( Table ):
         
         paths = self.getPaths( 0 ) 
         
-        if paths :
-            self.menu.add_separator()
+        if paths:
+            
+            call_menu = Menu( self.menu, tearoff = 0 )
 
             for path in paths:
-                sub_menu = Menu( self.menu, tearoff = 0 )
-                sub_menu.add_command( label = "Przywołaj", command = None)
-                self.menu.add_cascade( label = str( path ),  menu = sub_menu )     
+                call_menu.add_command( label = path, command = None ) 
+                
+            self.menu.add_cascade( label = "Przywołaj z ",  menu = call_menu )    
 
         paths2 = self.getPaths( 2 )
 
@@ -204,7 +218,8 @@ class ComposingTable( Table ):
 
             for path in paths2:
                 sub_menu = Menu( self.menu, tearoff = 0 )
-                sub_menu.add_command(  label = "Usuń",   command = lambda: self.deletePath( path ) )
+                sub_menu.add_command(  label = "Usuń", command = lambda path=path: self.deletePath( path ))
+                sub_menu.add_command(  label = "Zmień nazwę" )
                 self.menu.add_cascade( label = str( path ),  menu = sub_menu )  
 
         self.menu.tk_popup( event.x_root, event.y_root )
@@ -230,13 +245,14 @@ class TurnTable( Table ):
 
         paths = self.getPaths( 0 ) 
 
-        if paths :
-            self.menu.add_separator()
+        if paths:
+            
+            call_menu = Menu( self.menu, tearoff = 0 )
 
             for path in paths:
-                sub_menu = Menu( self.menu, tearoff = 0 )
-                sub_menu.add_command( label = "Przywołaj", command = None)
-                self.menu.add_cascade( label = str( path ),  menu = sub_menu )     
+                call_menu.add_command( label = path, command = None ) 
+                
+            self.menu.add_cascade( label = "Przywołaj z ",  menu = call_menu )   
 
         paths2 = self.getPaths( 2 )
 
@@ -245,7 +261,8 @@ class TurnTable( Table ):
 
             for path in paths2:
                 sub_menu = Menu( self.menu, tearoff = 0 )
-                sub_menu.add_command(  label = "Usuń",   command = lambda: self.deletePath( path ) )
+                sub_menu.add_command(  label = "Usuń", command = lambda path=path: self.deletePath( path ) )
+                sub_menu.add_command(  label = "Zmień nazwę" )
                 self.menu.add_cascade( label = str( path ),  menu = sub_menu )  
 
         self.menu.tk_popup( event.x_root, event.y_root )

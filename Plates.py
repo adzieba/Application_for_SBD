@@ -17,7 +17,7 @@ class Plate():
     def __init__( self, table ):
         print("plyta - poczatek")
         self.table = table
-        self.table.plate_on_table = True
+        self.table.setOccupied()
         self.gui = self.table.gui
         self.x_index = self.table.x_index
         self.y_index = self.table.y_index
@@ -30,7 +30,7 @@ class Plate():
         
         self.framebackground = Label( self.frame, image = self.gui.table_images[0] )
         self.framebackground.pack( fill = BOTH )
-        self.framebackground.bind('<Button-1>', lambda event: self.selectPlate())
+        self.framebackground.bind('<Button-1>', lambda event: self.setFocusOnPlate())
         self.framebackground.bind('<Button-3>', self.showPlateMenu )
         self.framebackground.bind('<Up>',       lambda event: self.movePlate( 'up' ))
         self.framebackground.bind('<Down>',     lambda event: self.movePlate( 'down' ))
@@ -41,10 +41,9 @@ class Plate():
         self.label.place( relx = 0.05, rely = 0.05 )
         self.label.bind('<Button-1>', lambda event: self.selectPlate())
         self.label.bind('<Button-3>', self.showPlateMenu )
-        self.framebackground.focus_set( )
+        
+        self.setFocusOnPlate()
         self.menu = None
-
-        self.gui.selected_plate = self
         self.path_to_follow = None
         self.following_path = False
         self.follow_thread = None
@@ -56,84 +55,71 @@ class Plate():
 
         if self.menu != None:
             self.menu.destroy()
+   
+        self.setFocusOnPlate()
 
-        if self.gui.selected_plate == self:
+        if self.gui.track_creating_active:
+            self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
+            self.menu.add_command( label = "Ścieżka - góra",  command = lambda: self.movePlate( 'up' ))
+            self.menu.add_command( label = "Ścieżka - dół ",  command = lambda: self.movePlate( 'down' ))
+            self.menu.add_command( label = "Ścieżka - lewo",  command = lambda: self.movePlate( 'left' ))
+            self.menu.add_command( label = "Ścieżka - prawo", command = lambda: self.movePlate( 'right' ))
+            self.menu.add_separator()
+            self.menu.add_command( label = "Zaakceptuj ścieżkę ", command = lambda: self.gui.new_track.acceptTrack( self.table )) 
+            self.menu.add_command( label = "Anuluj ścieżkę ",     command = lambda: self.gui.new_track.cancelTrack() )
+            self.menu.tk_popup( event.x_root, event.y_root )
+        else:
+            # ppm plate
+            self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
+            self.menu.add_command( label = "Idź - góra",  command = lambda: self.movePlate( 'up' ))
+            self.menu.add_command( label = "Idź - dół ",  command = lambda: self.movePlate( 'down' ))
+            self.menu.add_command( label = "Idź - lewo",  command = lambda: self.movePlate( 'left' ))
+            self.menu.add_command( label = "Idź - prawo", command = lambda: self.movePlate( 'right' ))
 
-            if self.gui.track_creating_active:
-                self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
-                self.menu.add_command( label = "Ścieżka - góra",  command = lambda: self.movePlate( 'up' ))
-                self.menu.add_command( label = "Ścieżka - dół ",  command = lambda: self.movePlate( 'down' ))
-                self.menu.add_command( label = "Ścieżka - lewo",  command = lambda: self.movePlate( 'left' ))
-                self.menu.add_command( label = "Ścieżka - prawo", command = lambda: self.movePlate( 'right' ))
+            paths = self.table.getPaths( 1 )            
+            
+            if paths:
                 self.menu.add_separator()
-                self.menu.add_command( label = "Zaakceptuj ścieżkę ", command = lambda: self.gui.new_track.acceptTrack( self.table )) 
-                self.menu.add_command( label = "Anuluj ścieżkę ",     command = lambda: self.gui.new_track.cancelTrack() )
-                self.menu.tk_popup( event.x_root, event.y_root )
-            else:
-                # ppm plate
-                self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
-                self.menu.add_command( label = "Idź - góra",  command = lambda: self.movePlate( 'up' ))
-                self.menu.add_command( label = "Idź - dół ",  command = lambda: self.movePlate( 'down' ))
-                self.menu.add_command( label = "Idź - lewo",  command = lambda: self.movePlate( 'left' ))
-                self.menu.add_command( label = "Idź - prawo", command = lambda: self.movePlate( 'right' ))
+                send_menu = Menu( self.menu, tearoff = 0 )
 
-                paths = self.table.getPaths( 1 )            
-               
-                if paths:
-                    self.menu.add_separator()
+                for path_name in paths:
+                    moves = paths[path_name]['moves']
+                    send_menu.add_command( label = path_name, command = lambda moves=moves: self.startFollowingPath( moves ))
+                    
+                self.menu.add_cascade( label = "Wyślij płytę do:", menu = send_menu )
 
-                    for path in paths:
-                        sub_menu = Menu( self.menu, tearoff = 0 )
-                        sub_menu.add_command( label = "Wyślij", command = lambda: self.startFollowingPath( paths[path] ) )
-                        self.menu.add_cascade( label = str( path ),  menu = sub_menu )
-
+            if not self.following_path:
                 self.menu.add_separator()
-                self.menu.add_command( label = "Zacznij rysować ścieżkę ", command = self.newTrackForPlate )
+                self.menu.add_command( label = "Zacznij rysować ścieżkę", command = self.startNewTrackForPlate )
                 self.menu.add_separator()
                 self.menu.add_command( label = "Usuń płytę", command = self.deletePlate )
-                self.menu.tk_popup( event.x_root, event.y_root )
+            else:
+                self.menu.add_command( label = "Zatrzymaj płytę", command = self.finishFollowingPath )
 
-    def newTrackForPlate( self ):
-        self.selectPlate()
+            self.menu.tk_popup( event.x_root, event.y_root )
+
+    def startNewTrackForPlate( self ):
+        self.setFocusOnPlate()
         self.gui.new_track = None
         self.gui.new_track = Track( self.gui, self.table )
 
     def deletePlate( self ):
-        self.table.plate_on_table = False
+        self.table.setFree()
         self.gui.selected_plate = None
         self.frame.destroy()
         self.menu.destroy()
         
-    def selectPlate( self ):
-
-        if not self.gui.track_creating_active:
-            self.framebackground.focus_set()
-            self.gui.selected_plate = self
+    def setFocusOnPlate( self ):
+        self.framebackground.focus_set()
+        self.gui.selected_plate = self
           
-    def startFollowingPath( self, path ): 
+    def startFollowingPath( self, moves ): 
        
         if not self.following_path:
             self.following_path = True
-            self.path_to_follow = path['moves']
-            self.follow_thread = FollowPathThread( self, self.path_to_follow )
-            self.follow_thread.run()
-           
-
-        # if len( self.table.move_directions ) > 0:
-
-            # if not self.moving_auto:
-            #     self.thread = ThreadedTask( self )
-            #     self.thread.start()
-            #     self.gui.task_list.append( self.thread )
-            #     self.moving_auto = True
-            # else:
-            #     if self.thread in self.gui.task_list:
-            #         self.thread.finish_thread = True
-            #         print("przed: ", self.gui.task_list)
-            #         print("usuwam: ", self.thread )
-            #         self.gui.task_list.remove( self.thread )
-            #         print("po: ", self.gui.task_list)
-            #         self.moving_auto = False               
+            self.moves_to_follow = moves
+            self.follow_thread = FollowPathThread( self, self.moves_to_follow )
+            self.follow_thread.start()          
 
     def finishFollowingPath( self ):
         self.following_path = False
@@ -152,7 +138,7 @@ class Plate():
                 if 'down' in next_table.move_directions:
                     next_turntable_need_turn = is_nexttable_turntable and next_table.position == "horizontal" 
                    
-                    if not next_table.plate_on_table:
+                    if next_table.isFree():
 
                         if not self.gui.track_creating_active:
 
@@ -181,7 +167,7 @@ class Plate():
                 if 'up' in next_table.move_directions:
                     next_turntable_need_turn = is_nexttable_turntable and next_table.position == "horizontal" 
                     
-                    if not next_table.plate_on_table:
+                    if next_table.isFree():
 
                         if not self.gui.track_creating_active:
 
@@ -209,7 +195,7 @@ class Plate():
                 if 'right' in next_table.move_directions:
                     next_turntable_need_turn = is_nexttable_turntable and next_table.position == "vertical" 
                     
-                    if not next_table.plate_on_table:
+                    if next_table.isFree():    
 
                         if not self.gui.track_creating_active:
 
@@ -238,7 +224,7 @@ class Plate():
                 if 'left' in next_table.move_directions:
                     next_turntable_need_turn = ( is_nexttable_turntable and next_table.position == "vertical" )
                     
-                    if not next_table.plate_on_table:
+                    if next_table.isFree():
 
                         if not self.gui.track_creating_active:
 
@@ -260,10 +246,10 @@ class Plate():
                             move_allowed = self.movePlateRight()
 
             if move_allowed:
-                self.table.plate_on_table = False
+                self.table.setFree()
                 self.table = next_table
-                self.table.plate_on_table = True
-                
+                self.table.setOccupied()
+                                
                 if self.gui.track_creating_active:
                     self.gui.new_track.addMove( direction )
 
