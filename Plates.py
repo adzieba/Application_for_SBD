@@ -6,7 +6,7 @@ import queue
 import time
 import Tables
 from SBD_Applications import *
-from threading_task_class import *
+from FollowPathThread import *
 from Tracks import *
 from random import randint
 import sys
@@ -41,11 +41,13 @@ class Plate():
         self.label.place( relx = 0.05, rely = 0.05 )
         self.label.bind('<Button-1>', lambda event: self.selectPlate())
         self.label.bind('<Button-3>', self.showPlateMenu )
-        
         self.framebackground.focus_set( )
-        self.gui.selected_plate = self
         self.menu = None
-        self.moving_auto = False
+
+        self.gui.selected_plate = self
+        self.path_to_follow = None
+        self.following_path = False
+        self.follow_thread = None
 
     def __del__( self ):
         print("plyta - koniec")
@@ -76,13 +78,13 @@ class Plate():
                 self.menu.add_command( label = "Idź - prawo", command = lambda: self.movePlate( 'right' ))
 
                 paths = self.table.getPaths( 1 )            
-
+               
                 if paths:
                     self.menu.add_separator()
 
                     for path in paths:
                         sub_menu = Menu( self.menu, tearoff = 0 )
-                        sub_menu.add_command( label = "Wyślij", command = None )
+                        sub_menu.add_command( label = "Wyślij", command = lambda: self.startFollowingPath( paths[path] ) )
                         self.menu.add_cascade( label = str( path ),  menu = sub_menu )
 
                 self.menu.add_separator()
@@ -108,24 +110,35 @@ class Plate():
             self.framebackground.focus_set()
             self.gui.selected_plate = self
           
-    def plate_move_auto( self ): 
-        print("lista:", self.gui.task_list)
+    def startFollowingPath( self, path ): 
+       
+        if not self.following_path:
+            self.following_path = True
+            self.path_to_follow = path['moves']
+            self.follow_thread = FollowPathThread( self, self.path_to_follow )
+            self.follow_thread.run()
+           
 
-        if len( self.table.move_directions ) > 0:
+        # if len( self.table.move_directions ) > 0:
 
-            if not self.moving_auto:
-                self.thread = ThreadedTask( self )
-                self.thread.start()
-                self.gui.task_list.append( self.thread )
-                self.moving_auto = True
-            else:
-                if self.thread in self.gui.task_list:
-                    self.thread.finish_thread = True
-                    print("przed: ", self.gui.task_list)
-                    print("usuwam: ", self.thread )
-                    self.gui.task_list.remove( self.thread )
-                    print("po: ", self.gui.task_list)
-                    self.moving_auto = False               
+            # if not self.moving_auto:
+            #     self.thread = ThreadedTask( self )
+            #     self.thread.start()
+            #     self.gui.task_list.append( self.thread )
+            #     self.moving_auto = True
+            # else:
+            #     if self.thread in self.gui.task_list:
+            #         self.thread.finish_thread = True
+            #         print("przed: ", self.gui.task_list)
+            #         print("usuwam: ", self.thread )
+            #         self.gui.task_list.remove( self.thread )
+            #         print("po: ", self.gui.task_list)
+            #         self.moving_auto = False               
+
+    def finishFollowingPath( self ):
+        self.following_path = False
+        self.path_to_follow = None
+        self.follow_thread  = None
 
     def movePlate( self, direction ):
         move_allowed = False
@@ -253,9 +266,11 @@ class Plate():
                 
                 if self.gui.track_creating_active:
                     self.gui.new_track.addMove( direction )
-                    
+
+            return move_allowed
         else:
             print("brak takiego ruchu")
+            return False
 
     def movePlateUp( self ):
         new_y_pos = self.y_pos - self.gui.tile_height

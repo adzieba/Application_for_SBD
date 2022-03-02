@@ -20,7 +20,7 @@ class SBD_Application():
         self.plate_list   = []
         self.tables_list  = []
         self.table_images = []
-        self.table_graphics = [ 
+        self.graphics = [ 
             "plate.png",         #0
             "conveyor_h.png",    #1
             "station_right.png", #2    
@@ -40,8 +40,9 @@ class SBD_Application():
 
         self.drawWindow()
 
-        for i in range( len( self.table_graphics )):
-            img = Image.open( os.path.join( sys.path[0], self.config_file['graphics']['folder'], self.table_graphics[i] ) )
+        for i in range( len( self.graphics )):
+            folder_with_graphics = self.config_file['graphics']['folder']
+            img = Image.open( os.path.join( sys.path[0], folder_with_graphics, self.graphics[i] ))
             img = img.resize(( self.tile_width , self.tile_height ))
             self.table_images.append( ImageTk.PhotoImage( img ))
 
@@ -104,27 +105,26 @@ class SBD_Application():
         # table array filled with 0
         self.tables_list = [[0] * self.config_file['window']['columns'] for i in range(self.config_file['window']['rows'])]
 
-        # put table objects in assigned places
-        for table_object in self.config_file['tables']['objects']:
+        # grid filled with table objects
+        for table_name in self.config_file['tables']['objects']:
                     
-            x = self.config_file['tables']['objects'][table_object]['x']
-            y = self.config_file['tables']['objects'][table_object]['y']
-            table_type = self.config_file['tables']['objects'][table_object]['type']
-            name = table_object
-            move_directions = self.config_file['tables']['objects'][table_object]['move_directions']
+            table_x = self.config_file['tables']['objects'][table_name]['x']
+            table_y = self.config_file['tables']['objects'][table_name]['y']
+            table_type = self.config_file['tables']['objects'][table_name]['type']
+            possible_moves = self.config_file['tables']['objects'][table_name]['move_directions']
 
             if table_type == "D":
-                table = DemouldingTable( self, table_type, move_directions, x, y, name )
+                table = DemouldingTable( self, table_type, possible_moves, table_x, table_y, table_name )
             elif table_type == "M":
-                table = MouldingTable( self, table_type, move_directions, x, y, name )
+                table = MouldingTable( self, table_type, possible_moves, table_x, table_y, table_name )
             elif table_type == "C":
-                table = ComposingTable( self, table_type, move_directions, x, y, name )
+                table = ComposingTable( self, table_type, possible_moves, table_x, table_y, table_name )
             elif table_type == "+":
-                table = TurnTable( self, table_type, move_directions, x, y, name )
+                table = TurnTable( self, table_type, possible_moves, table_x, table_y, table_name )
             elif table_type == "|" or table_type == "-":
-                table = ConveyorTable( self, table_type, move_directions, x, y, name )
+                table = ConveyorTable( self, table_type, possible_moves, table_x, table_y, table_name )
             
-            self.tables_list[y][x] = table
+            self.tables_list[table_y][table_x] = table
 
     def run( self ):
         mainloop()

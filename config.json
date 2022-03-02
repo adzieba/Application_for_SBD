@@ -187,7 +187,30 @@
                 "y": 4,
                 "move_directions": [
                     "right"
-                ]
+                ],
+                "paths": {
+                    "m3 to c1": {
+                        "moves": [
+                            "right",
+                            "right",
+                            "down",
+                            "down",
+                            "down",
+                            "down",
+                            "right",
+                            "right",
+                            "right",
+                            "right",
+                            "right",
+                            "right"
+                        ],
+                        "destination": {
+                            "name": "conveyor_h46",
+                            "x": 10,
+                            "y": 8
+                        }
+                    }
+                }
             },
             "conveyor_h11": {
                 "type": "-",
@@ -315,7 +338,28 @@
                 "y": 6,
                 "move_directions": [
                     "right"
-                ]
+                ],
+                "paths": {
+                    "m2 to c1": {
+                        "moves": [
+                            "right",
+                            "right",
+                            "down",
+                            "down",
+                            "right",
+                            "right",
+                            "right",
+                            "right",
+                            "right",
+                            "right"
+                        ],
+                        "destination": {
+                            "name": "conveyor_h46",
+                            "x": 10,
+                            "y": 8
+                        }
+                    }
+                }
             },
             "conveyor_h25": {
                 "type": "-",
@@ -443,7 +487,26 @@
                 "y": 8,
                 "move_directions": [
                     "right"
-                ]
+                ],
+                "paths": {
+                    "m1 to c1": {
+                        "moves": [
+                            "right",
+                            "right",
+                            "right",
+                            "right",
+                            "right",
+                            "right",
+                            "right",
+                            "right"
+                        ],
+                        "destination": {
+                            "name": "conveyor_h46",
+                            "x": 10,
+                            "y": 8
+                        }
+                    }
+                }
             },
             "conveyor_h39": {
                 "type": "-",
@@ -573,7 +636,7 @@
                     "up"
                 ],
                 "paths": {
-                    "call from c2": {
+                    "c1 to c2": {
                         "moves": [
                             "up",
                             "up",
@@ -592,6 +655,51 @@
                             "x": 11,
                             "y": 10
                         }
+                    },
+                    "c1 to m1": {
+                        "moves": [
+                            "up",
+                            "up",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "demoulding38",
+                            "x": 2,
+                            "y": 8
+                        }
+                    },
+                    "c1 to m2": {
+                        "moves": [
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "demoulding24",
+                            "x": 2,
+                            "y": 6
+                        }
+                    },
+                    "c1 to m3": {
+                        "moves": [
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "demoulding10",
+                            "x": 2,
+                            "y": 4
+                        }
                     }
                 }
             },
@@ -603,7 +711,7 @@
                     "up"
                 ],
                 "paths": {
-                    "call from c1": {
+                    "c2 to c1": {
                         "moves": [
                             "up",
                             "up",
