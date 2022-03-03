@@ -17,7 +17,7 @@ class Plate():
     def __init__( self, table ):
         print("plyta - poczatek")
         self.table = table
-        self.table.setOccupied()
+        self.table.setOccupied( self )
         self.gui = self.table.gui
         self.x_index = self.table.x_index
         self.y_index = self.table.y_index
@@ -252,7 +252,7 @@ class Plate():
             if move_done:
                 self.table.setFree()
                 self.table = next_table
-                self.table.setOccupied()
+                self.table.setOccupied( self )
                                 
                 if self.gui.track_creating_active:
                     self.gui.new_track.addMove( direction )

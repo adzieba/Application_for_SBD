@@ -249,23 +249,6 @@
                     "right"
                 ],
                 "paths": {
-                    "to c1": {
-                        "moves": [
-                            "right",
-                            "right",
-                            "down",
-                            "down",
-                            "down",
-                            "down",
-                            "down",
-                            "down"
-                        ],
-                        "destination": {
-                            "name": "composing52",
-                            "x": 4,
-                            "y": 10
-                        }
-                    },
                     "d1conv": {
                         "moves": [
                             "right",
@@ -286,6 +269,23 @@
                             "name": "conveyor_h46",
                             "x": 10,
                             "y": 8
+                        }
+                    },
+                    "c1": {
+                        "moves": [
+                            "right",
+                            "right",
+                            "down",
+                            "down",
+                            "down",
+                            "down",
+                            "down",
+                            "down"
+                        ],
+                        "destination": {
+                            "name": "composing52",
+                            "x": 4,
+                            "y": 10
                         }
                     }
                 }
@@ -537,21 +537,6 @@
                     "right"
                 ],
                 "paths": {
-                    "c1": {
-                        "moves": [
-                            "right",
-                            "right",
-                            "down",
-                            "down",
-                            "down",
-                            "down"
-                        ],
-                        "destination": {
-                            "name": "composing52",
-                            "x": 4,
-                            "y": 10
-                        }
-                    },
                     "d1conv": {
                         "moves": [
                             "right",
@@ -570,6 +555,21 @@
                             "name": "conveyor_h46",
                             "x": 10,
                             "y": 8
+                        }
+                    },
+                    "c1": {
+                        "moves": [
+                            "right",
+                            "right",
+                            "down",
+                            "down",
+                            "down",
+                            "down"
+                        ],
+                        "destination": {
+                            "name": "composing52",
+                            "x": 4,
+                            "y": 10
                         }
                     }
                 }
@@ -822,19 +822,6 @@
                     "right"
                 ],
                 "paths": {
-                    "m1 to c1": {
-                        "moves": [
-                            "right",
-                            "right",
-                            "down",
-                            "down"
-                        ],
-                        "destination": {
-                            "name": "composing52",
-                            "x": 4,
-                            "y": 10
-                        }
-                    },
                     "d1conv": {
                         "moves": [
                             "right",
@@ -851,6 +838,19 @@
                             "name": "conveyor_h46",
                             "x": 10,
                             "y": 8
+                        }
+                    },
+                    "c1": {
+                        "moves": [
+                            "right",
+                            "right",
+                            "down",
+                            "down"
+                        ],
+                        "destination": {
+                            "name": "composing52",
+                            "x": 4,
+                            "y": 10
                         }
                     }
                 }
@@ -1096,19 +1096,6 @@
                     "up"
                 ],
                 "paths": {
-                    "c1 to m1": {
-                        "moves": [
-                            "up",
-                            "up",
-                            "left",
-                            "left"
-                        ],
-                        "destination": {
-                            "name": "demoulding38",
-                            "x": 2,
-                            "y": 8
-                        }
-                    },
                     "c1 to m2": {
                         "moves": [
                             "up",
@@ -1139,6 +1126,36 @@
                             "name": "demoulding10",
                             "x": 2,
                             "y": 4
+                        }
+                    },
+                    "sciezka do m3": {
+                        "moves": [
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "up",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "demoulding10",
+                            "x": 2,
+                            "y": 4
+                        }
+                    },
+                    "m1": {
+                        "moves": [
+                            "up",
+                            "up",
+                            "left",
+                            "left"
+                        ],
+                        "destination": {
+                            "name": "demoulding38",
+                            "x": 2,
+                            "y": 8
                         }
                     }
                 }

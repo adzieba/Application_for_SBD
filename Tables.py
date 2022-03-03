@@ -18,6 +18,7 @@ class Table():
 
         self.label = None
         self.plate_on_table = False
+        self.plate = None
         self.callvalue = 0
         self.sendvalue = 0
         self.menu = None
@@ -34,12 +35,14 @@ class Table():
         with open( os.path.join( sys.path[0], "config.json" ), 'r') as infile:
             config_file = json.load( infile ) 
 
+            # for selected table key 'paths' exists
             if 'paths' in config_file['tables']['objects'][self.name] and len( config_file['tables']['objects'][self.name] ) > 0 :
                 
                 paths = {}
                 
                 for path in config_file['tables']['objects'][self.name]['paths']:
-
+                    
+                    # get end table coordinates
                     destination_table_x = config_file['tables']['objects'][self.name]['paths'][path]['destination']['x']
                     destination_table_y = config_file['tables']['objects'][self.name]['paths'][path]['destination']['y']
                     
@@ -76,11 +79,44 @@ class Table():
         with open( os.path.join( sys.path[0], "config.json" ), 'w') as outfile:
             json.dump( config_file, outfile, indent = 4 )
 
-    def setOccupied( self ):
+    def callPlate( self, path_entry ):
+        x = path_entry['destination']['x']
+        y = path_entry['destination']['y']
+        moves = path_entry['moves']
+        reversed_moves = self.reverseMoves( moves )
+        plate = self.gui.tables_list[y][x].plate
+        plate.startFollowingPath( reversed_moves )
+
+    def reverseMoves( self, moves ):
+        reversed_moves = list( reversed( moves ))
+        
+        for move in range( len( reversed_moves )):
+            
+            if reversed_moves[move] == 'up':
+                reversed_moves[move] = 'down'
+                continue
+
+            if reversed_moves[move] == 'down':
+                reversed_moves[move] = 'up'
+                continue
+
+            if reversed_moves[move] == 'left':
+                reversed_moves[move] = 'right'
+                continue
+            
+            if reversed_moves[move] == 'right':
+                reversed_moves[move] = 'left'     
+                continue     
+
+        return reversed_moves
+
+    def setOccupied( self, plate ):
         self.plate_on_table = True
+        self.plate = plate
 
     def setFree( self ):
         self.plate_on_table = False
+        self.plate = None
 
     def isFree( self ):
         return not self.plate_on_table
@@ -107,15 +143,15 @@ class DemouldingTable( Table ):
             self.menu.destroy()
         
         paths = self.getPaths( 0 ) 
-
+        
         self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
                 
         if paths:
             
             call_menu = Menu( self.menu, tearoff = 0 )
-
+            
             for path in paths:
-                call_menu.add_command( label = path, command = None ) 
+                call_menu.add_command( label = path, command = lambda path=paths[path]: self.callPlate( path ) ) 
                 
             self.menu.add_cascade( label = "Przywołaj z ",  menu = call_menu )
 
@@ -131,6 +167,8 @@ class DemouldingTable( Table ):
                 self.menu.add_cascade( label = str( path ),  menu = sub_menu )  
 
         self.menu.tk_popup( event.x_root, event.y_root )
+
+
 
 class MouldingTable( Table ):
 
@@ -156,13 +194,12 @@ class MouldingTable( Table ):
         self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
                 
         paths = self.getPaths( 0 ) 
-        
+
         if paths:
-            
             call_menu = Menu( self.menu, tearoff = 0 )
 
             for path in paths:
-                call_menu.add_command( label = path, command = None ) 
+                call_menu.add_command( label = path, command = lambda path=paths[path]: self.callPlate( path ) ) 
                 
             self.menu.add_cascade( label = "Przywołaj z ",  menu = call_menu )   
 
@@ -210,7 +247,7 @@ class ComposingTable( Table ):
             call_menu = Menu( self.menu, tearoff = 0 )
 
             for path in paths:
-                call_menu.add_command( label = path, command = None ) 
+                call_menu.add_command( label = path, command = lambda path=paths[path]: self.callPlate( path ) ) 
                 
             self.menu.add_cascade( label = "Przywołaj z ",  menu = call_menu )    
 
@@ -253,7 +290,7 @@ class TurnTable( Table ):
             call_menu = Menu( self.menu, tearoff = 0 )
 
             for path in paths:
-                call_menu.add_command( label = path, command = None ) 
+                call_menu.add_command( label = path, command = lambda path=paths[path]: self.callPlate( path ) ) 
                 
             self.menu.add_cascade( label = "Przywołaj z ",  menu = call_menu )   
 

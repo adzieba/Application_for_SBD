@@ -102,7 +102,7 @@ class Track():
 
                 reversed_moves = list( reversed( self.moves ))
                
-                for move in range( len(reversed_moves)):
+                for move in range( len( reversed_moves )):
                     print(move)
                     print("przed: ", reversed_moves[move])
 
