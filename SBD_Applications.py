@@ -33,6 +33,7 @@ class SBD_Application():
 
         self.track_creating_active = False
         self.new_track = None
+        self.selected_plate = None
         self.tile_width  = self.config_file['window']['tile_width']
         self.tile_height = self.config_file['window']['tile_height']
         self.table_area_width  = self.config_file['window']['table_area_width']

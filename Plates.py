@@ -32,14 +32,14 @@ class Plate():
         self.framebackground.pack( fill = BOTH )
         self.framebackground.bind('<Button-1>', lambda event: self.setFocusOnPlate())
         self.framebackground.bind('<Button-3>', self.showPlateMenu )
-        self.framebackground.bind('<Up>',       lambda event: self.movePlate( 'up' ))
-        self.framebackground.bind('<Down>',     lambda event: self.movePlate( 'down' ))
-        self.framebackground.bind('<Left>',     lambda event: self.movePlate( 'left' ))
-        self.framebackground.bind('<Right>',    lambda event: self.movePlate( 'right' ))
+        self.framebackground.bind('<Up>',       lambda event: self.manualMovePlate( 'up' ))
+        self.framebackground.bind('<Down>',     lambda event: self.manualMovePlate( 'down' ))
+        self.framebackground.bind('<Left>',     lambda event: self.manualMovePlate( 'left' ))
+        self.framebackground.bind('<Right>',    lambda event: self.manualMovePlate( 'right' ))
 
         self.label = Label( self.frame, height = 1, width=2, text = '123', bg='grey')
         self.label.place( relx = 0.05, rely = 0.05 )
-        self.label.bind('<Button-1>', lambda event: self.selectPlate())
+        self.label.bind('<Button-1>', lambda event: self.setFocusOnPlate())
         self.label.bind('<Button-3>', self.showPlateMenu )
         
         self.setFocusOnPlate()
@@ -60,10 +60,10 @@ class Plate():
 
         if self.gui.track_creating_active:
             self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
-            self.menu.add_command( label = "Ścieżka - góra",  command = lambda: self.movePlate( 'up' ))
-            self.menu.add_command( label = "Ścieżka - dół ",  command = lambda: self.movePlate( 'down' ))
-            self.menu.add_command( label = "Ścieżka - lewo",  command = lambda: self.movePlate( 'left' ))
-            self.menu.add_command( label = "Ścieżka - prawo", command = lambda: self.movePlate( 'right' ))
+            self.menu.add_command( label = "Ścieżka - góra",  command = lambda: self.manualMovePlate( 'up' ))
+            self.menu.add_command( label = "Ścieżka - dół ",  command = lambda: self.manualMovePlate( 'down' ))
+            self.menu.add_command( label = "Ścieżka - lewo",  command = lambda: self.manualMovePlate( 'left' ))
+            self.menu.add_command( label = "Ścieżka - prawo", command = lambda: self.manualMovePlate( 'right' ))
             self.menu.add_separator()
             self.menu.add_command( label = "Zaakceptuj ścieżkę ", command = lambda: self.gui.new_track.acceptTrack( self.table )) 
             self.menu.add_command( label = "Anuluj ścieżkę ",     command = lambda: self.gui.new_track.cancelTrack() )
@@ -71,10 +71,10 @@ class Plate():
         else:
             # ppm plate
             self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
-            self.menu.add_command( label = "Idź - góra",  command = lambda: self.movePlate( 'up' ))
-            self.menu.add_command( label = "Idź - dół ",  command = lambda: self.movePlate( 'down' ))
-            self.menu.add_command( label = "Idź - lewo",  command = lambda: self.movePlate( 'left' ))
-            self.menu.add_command( label = "Idź - prawo", command = lambda: self.movePlate( 'right' ))
+            self.menu.add_command( label = "Idź - góra",  command = lambda: self.manualMovePlate( 'up' ))
+            self.menu.add_command( label = "Idź - dół ",  command = lambda: self.manualMovePlate( 'down' ))
+            self.menu.add_command( label = "Idź - lewo",  command = lambda: self.manualMovePlate( 'left' ))
+            self.menu.add_command( label = "Idź - prawo", command = lambda: self.manualMovePlate( 'right' ))
 
             paths = self.table.getPaths( 1 )            
             
@@ -126,8 +126,12 @@ class Plate():
         self.path_to_follow = None
         self.follow_thread  = None
 
+    def manualMovePlate( self, direction ):
+        if not self.following_path:
+            self.movePlate( direction )
+
     def movePlate( self, direction ):
-        move_allowed = False
+        move_done = False
         
         if direction in self.table.move_directions:
 
@@ -147,17 +151,17 @@ class Plate():
                                 if self.table.position == "horizontal":
                                     self.table.turnTable()
                                 else:
-                                    move_allowed = self.movePlateUp()
+                                    move_done = self.movePlateUp()
 
                             else:
 
                                 if next_turntable_need_turn:
                                     next_table.turnTable()
                                 else:
-                                    move_allowed = self.movePlateUp()
+                                    move_done = self.movePlateUp()
 
                         else:
-                            move_allowed = self.movePlateUp()                
+                            move_done = self.movePlateUp()                
 
 
             elif direction == 'down':
@@ -176,17 +180,17 @@ class Plate():
                                 if self.table.position == "horizontal":
                                     self.table.turnTable()
                                 else:
-                                    move_allowed = self.movePlateDown()
+                                    move_done = self.movePlateDown()
 
                             else:
 
                                 if next_turntable_need_turn: 
                                     next_table.turnTable()
                                 else:
-                                    move_allowed = self.movePlateDown()
+                                    move_done = self.movePlateDown()
 
                         else:
-                            move_allowed = self.movePlateDown()
+                            move_done = self.movePlateDown()
 
             elif direction == 'left':
                 next_table = self.gui.tables_list[ self.y_index ][ self.x_index - 1 ]
@@ -204,17 +208,17 @@ class Plate():
                                 if self.table.position == "vertical":
                                     self.table.turnTable()
                                 else:
-                                    move_allowed = self.movePlateLeft()
+                                    move_done = self.movePlateLeft()
 
                             else:
 
                                 if next_turntable_need_turn:
                                     next_table.turnTable()
                                 else:
-                                    move_allowed = self.movePlateLeft()
+                                    move_done = self.movePlateLeft()
 
                         else:
-                            move_allowed = self.movePlateLeft()
+                            move_done = self.movePlateLeft()
 
 
             elif direction == 'right':
@@ -233,19 +237,19 @@ class Plate():
                                 if self.table.position == "vertical":
                                     self.table.turnTable()
                                 else:
-                                    move_allowed = self.movePlateRight()
+                                    move_done = self.movePlateRight()
 
                             else:
                                
                                 if next_turntable_need_turn :
                                     next_table.turnTable()
                                 else:
-                                    move_allowed = self.movePlateRight()
+                                    move_done = self.movePlateRight()
 
                         else:
-                            move_allowed = self.movePlateRight()
+                            move_done = self.movePlateRight()
 
-            if move_allowed:
+            if move_done:
                 self.table.setFree()
                 self.table = next_table
                 self.table.setOccupied()
@@ -253,7 +257,7 @@ class Plate():
                 if self.gui.track_creating_active:
                     self.gui.new_track.addMove( direction )
 
-            return move_allowed
+            return move_done
         else:
             print("brak takiego ruchu")
             return False

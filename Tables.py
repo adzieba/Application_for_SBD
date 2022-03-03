@@ -44,12 +44,15 @@ class Table():
                     destination_table_y = config_file['tables']['objects'][self.name]['paths'][path]['destination']['y']
                     
                     if mode == 0:
-                        if self.gui.tables_list[destination_table_y][ destination_table_x].plate_on_table:
+                        if self.gui.tables_list[destination_table_y][destination_table_x].plate_on_table:
                             paths[ path ] = config_file['tables']['objects'][self.name]['paths'][path]
 
                     elif mode == 1:
                         if not self.gui.tables_list[destination_table_y][ destination_table_x].plate_on_table:
                             paths[ path ] = config_file['tables']['objects'][self.name]['paths'][path]
+                        else:
+                            if 'queued' in config_file['tables']['objects'][self.name]['paths'][path]:
+                                paths[ path ] = config_file['tables']['objects'][self.name]['paths'][path]
 
                     elif mode == 2:
                         paths[ path ] = config_file['tables']['objects'][self.name]['paths'][path]
