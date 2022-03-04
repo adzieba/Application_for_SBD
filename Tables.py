@@ -326,3 +326,24 @@ class ConveyorTable( Table ):
             
         elif type == "-":
             self.framebackground["image"] = self.gui.table_images[1]
+
+        self.framebackground.bind( '<Button-3>', self.showMenu )
+
+    def showMenu( self, event ):
+
+        if self.menu != None:
+            self.menu.destroy()
+        
+        self.menu = Menu( self.gui.visualization_background, tearoff = 0 )
+        
+        paths = self.getPaths( 2 ) 
+
+        if paths:   
+            
+            for path in paths:
+                sub_menu = Menu( self.menu, tearoff = 0 )
+                sub_menu.add_command(  label = "Usuń", command = lambda path=path: self.deletePath( path ) )
+                sub_menu.add_command(  label = "Zmień nazwę" )
+                self.menu.add_cascade( label = str( path ),  menu = sub_menu )  
+
+        self.menu.tk_popup( event.x_root, event.y_root )
