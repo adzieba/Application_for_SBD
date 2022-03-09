@@ -104,7 +104,9 @@ class SBD_Application():
     def drawTables( self ):
 
         # table array filled with 0
-        self.tables_list = [[0] * self.config_file['window']['columns'] for i in range(self.config_file['window']['rows'])]
+        self.columns_limit = self.config_file['window']['columns']
+        self.rows_limit = self.config_file['window']['rows']
+        self.tables_list = [[0] * self.columns_limit for i in range( self.rows_limit ) ]
 
         # grid filled with table objects
         for table_name in self.config_file['tables']['objects']:

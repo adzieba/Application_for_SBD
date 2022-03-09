@@ -92,23 +92,34 @@ class Table():
         
         for move in range( len( reversed_moves )):
             
-            if reversed_moves[move] == 'up':
-                reversed_moves[move] = 'down'
-                continue
+            reversed_moves[move] = self.getOppositeDirection( reversed_moves[move] )
+            continue
 
-            if reversed_moves[move] == 'down':
-                reversed_moves[move] = 'up'
-                continue
+            # if reversed_moves[move] == 'up':
+            #     reversed_moves[move] = 'down'
+            #     continue
 
-            if reversed_moves[move] == 'left':
-                reversed_moves[move] = 'right'
-                continue
+            # if reversed_moves[move] == 'down':
+            #     reversed_moves[move] = 'up'
+            #     continue
+
+            # if reversed_moves[move] == 'left':
+            #     reversed_moves[move] = 'right'
+            #     continue
             
-            if reversed_moves[move] == 'right':
-                reversed_moves[move] = 'left'     
-                continue     
+            # if reversed_moves[move] == 'right':
+            #     reversed_moves[move] = 'left'     
+            #     continue     
 
         return reversed_moves
+
+    def getOppositeDirection( self, direction ):
+
+        if   direction == 'up'    : return 'down'
+        elif direction == 'down'  : return 'up'
+        elif direction == 'left'  : return 'right'
+        elif direction == 'right' : return 'left'
+        else: return False
 
     def setOccupied( self, plate ):
         self.plate_on_table = True
