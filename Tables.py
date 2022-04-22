@@ -1,16 +1,20 @@
 from tkinter import *
 from Plates import *
+from SBD_DataBaseLogger import *
 from PIL     import ImageTk, Image
+import pandastable
 import sys, os, json
+import pyodbc
 
 class Table():
 
-    def __init__( self, gui, type, move_directions, x_index, y_index, name ):
+    def __init__( self, gui, type, move_directions, x_index, y_index, name, db_id ):
         self.gui = gui
         self.move_directions = move_directions
         self.x_index = x_index
         self.y_index = y_index
         self.name = name
+        self.db_id = db_id
         self.x_pos = self.x_index * self.gui.tile_width
         self.y_pos = self.y_index * self.gui.tile_height
         self.tile_x_center = self.x_pos + self.gui.tile_width  / 2
@@ -33,7 +37,7 @@ class Table():
     def getPaths( self, mode ):
 
         with open( os.path.join( sys.path[0], "config.json" ), 'r') as infile:
-            config_file = json.load( infile ) 
+            config_file = json.load( infile )         
 
             # for selected table key 'paths' exists
             if 'paths' in config_file['tables']['objects'][self.name] and len( config_file['tables']['objects'][self.name] ) > 0 :
@@ -123,8 +127,8 @@ class Table():
 
 class DemouldingTable( Table ):
 
-    def __init__( self, gui, type, move_directions, x_index, y_index, name ):
-        super().__init__( gui, type, move_directions, x_index, y_index, name )
+    def __init__( self, gui, type, move_directions, x_index, y_index, name, db_id ):
+        super().__init__( gui, type, move_directions, x_index, y_index, name, db_id )
 
         if 'right' in self.move_directions: 
             self.framebackground["image"] = self.gui.table_images[2]
@@ -168,12 +172,10 @@ class DemouldingTable( Table ):
 
         self.menu.tk_popup( event.x_root, event.y_root )
 
-
-
 class MouldingTable( Table ):
 
-    def __init__( self, gui, type, move_directions, x_index, y_index, name ):
-        super().__init__( gui, type, move_directions, x_index, y_index, name )
+    def __init__( self, gui, type, move_directions, x_index, y_index, name, db_id ):
+        super().__init__( gui, type, move_directions, x_index, y_index, name, db_id )
         
         if 'right' in self.move_directions: 
             self.framebackground["image"] = self.gui.table_images[2]
@@ -218,8 +220,8 @@ class MouldingTable( Table ):
 
 class ComposingTable( Table ):
 
-    def __init__( self, gui, type, move_directions, x_index, y_index, name ):
-        super().__init__( gui, type, move_directions, x_index, y_index, name )
+    def __init__( self, gui, type, move_directions, x_index, y_index, name, db_id ):
+        super().__init__( gui, type, move_directions, x_index, y_index, name, db_id )
     
         if 'right' in self.move_directions: 
             self.framebackground["image"] = self.gui.table_images[2]
@@ -265,12 +267,46 @@ class ComposingTable( Table ):
         self.menu.tk_popup( event.x_root, event.y_root )
 
     def startNewPlate( self ):
-        plate = Plate( self )
+        popup_width  = 600
+        popup_height = 600
+        popup_x_root = int( self.gui.window.winfo_x() + self.gui.window_width  / 2 - popup_width  / 2 )
+        popup_y_root = int( self.gui.window.winfo_y() + self.gui.window_height / 2 - popup_height / 2 )
+        popup_size   = "{}x{}+{}+{}".format( popup_width, popup_height, popup_x_root, popup_y_root )
+        popup = Toplevel()
+        popup.title("Nowa płyta")
+        popup.geometry( popup_size )
+        popup.resizable( False, False )
+
+        db_read = SBD_DataBaseLogger()
+        df = db_read.showAvailablePlates()
+
+        background = Frame( popup, width = 600 , height = 500 )
+        background.pack_propagate( 0 )
+        background.place( x = 0, y = 50 )
+        
+        pt = pandastable.Table(background, dataframe = df )
+        pt.show()
+                
+        label_start_table = Label( popup, text = "Wybierz płytę: " ).place( x = 20, y = 20 )
+        button_save =  Button( popup, text = "Wybierz", command = lambda : self.popupSaveButton( popup, pt ) ).place( x = 20,  y = 560 )
+        button_close = Button( popup, text = "Anuluj",  command = lambda : self.popupCancelButton( popup ) ).place( x = 120,  y = 560 )
+
+    def popupSaveButton( self, widget, pt ):
+        row = pt.getSelectedRows()
+        plate_rfid_number = row.iloc[0]['rfid_number'] 
+        plate = Plate( self, plate_rfid_number )
+
+        db_read = SBD_DataBaseLogger()
+        db_read.addAssembly( self.db_id, plate_rfid_number )
+        widget.destroy()
+
+    def popupCancelButton( self, widget ):
+        widget.destroy()
 
 class TurnTable( Table ):
 
-    def __init__( self, gui, type, move_directions, x_index, y_index, name ):
-        super().__init__( gui, type, move_directions, x_index, y_index, name )
+    def __init__( self, gui, type, move_directions, x_index, y_index, name, db_id ):
+        super().__init__( gui, type, move_directions, x_index, y_index, name, db_id )
         self.position = "horizontal"
         self.framebackground["image"] = self.gui.table_images[3]
         self.framebackground.bind( '<Button-3>', self.showMenu )
@@ -318,8 +354,8 @@ class TurnTable( Table ):
 
 class ConveyorTable( Table ):
 
-    def __init__( self, gui, type, move_directions, x_index, y_index, name ):
-        super().__init__( gui, type, move_directions, x_index, y_index, name )
+    def __init__( self, gui, type, move_directions, x_index, y_index, name, db_id ):
+        super().__init__( gui, type, move_directions, x_index, y_index, name, db_id )
 
         if type == "|":
             self.framebackground["image"] = self.gui.table_images[4]

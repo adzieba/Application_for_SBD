@@ -95,6 +95,7 @@
                 "type": "+",
                 "x": 4,
                 "y": 2,
+                "db_id": 2,
                 "move_directions": [
                     "down",
                     "right"
@@ -104,6 +105,7 @@
                 "type": "-",
                 "x": 5,
                 "y": 2,
+                "db_id": 26,
                 "move_directions": [
                     "left",
                     "right"
@@ -113,6 +115,7 @@
                 "type": "-",
                 "x": 6,
                 "y": 2,
+                "db_id": 27,
                 "move_directions": [
                     "left",
                     "right"
@@ -122,6 +125,7 @@
                 "type": "-",
                 "x": 7,
                 "y": 2,
+                "db_id": 28,
                 "move_directions": [
                     "left",
                     "right"
@@ -131,6 +135,7 @@
                 "type": "-",
                 "x": 8,
                 "y": 2,
+                "db_id": 29,
                 "move_directions": [
                     "left",
                     "right"
@@ -140,6 +145,7 @@
                 "type": "-",
                 "x": 9,
                 "y": 2,
+                "db_id": 30,
                 "move_directions": [
                     "left",
                     "right"
@@ -149,6 +155,7 @@
                 "type": "-",
                 "x": 10,
                 "y": 2,
+                "db_id": 31,
                 "move_directions": [
                     "left",
                     "right"
@@ -158,6 +165,7 @@
                 "type": "+",
                 "x": 11,
                 "y": 2,
+                "db_id": 3,
                 "move_directions": [
                     "down",
                     "left"
@@ -167,6 +175,7 @@
                 "type": "|",
                 "x": 4,
                 "y": 3,
+                "db_id": 16,
                 "move_directions": [
                     "up",
                     "down"
@@ -250,6 +259,7 @@
                 "type": "|",
                 "x": 11,
                 "y": 3,
+                "db_id": 17,
                 "move_directions": [
                     "up",
                     "down"
@@ -259,6 +269,7 @@
                 "type": "M",
                 "x": 2,
                 "y": 4,
+                "db_id": 13,
                 "move_directions": [
                     "right"
                 ],
@@ -346,6 +357,7 @@
                 "type": "-",
                 "x": 3,
                 "y": 4,
+                "db_id": 32,
                 "move_directions": [
                     "left",
                     "right"
@@ -355,6 +367,7 @@
                 "type": "+",
                 "x": 4,
                 "y": 4,
+                "db_id": 4,
                 "move_directions": [
                     "up",
                     "down",
@@ -366,6 +379,7 @@
                 "type": "-",
                 "x": 5,
                 "y": 4,
+                "db_id": 33,
                 "move_directions": [
                     "left",
                     "right"
@@ -435,6 +449,7 @@
                 "type": "-",
                 "x": 6,
                 "y": 4,
+                "db_id": 34,
                 "move_directions": [
                     "left",
                     "right"
@@ -444,6 +459,7 @@
                 "type": "-",
                 "x": 7,
                 "y": 4,
+                "db_id": 35,
                 "move_directions": [
                     "left",
                     "right"
@@ -453,6 +469,7 @@
                 "type": "-",
                 "x": 8,
                 "y": 4,
+                "db_id": 36,
                 "move_directions": [
                     "left",
                     "right"
@@ -462,6 +479,7 @@
                 "type": "-",
                 "x": 9,
                 "y": 4,
+                "db_id": 37,
                 "move_directions": [
                     "left",
                     "right"
@@ -471,6 +489,7 @@
                 "type": "-",
                 "x": 10,
                 "y": 4,
+                "db_id": 38,
                 "move_directions": [
                     "left",
                     "right"
@@ -480,6 +499,7 @@
                 "type": "+",
                 "x": 11,
                 "y": 4,
+                "db_id": 5,
                 "move_directions": [
                     "up",
                     "down",
@@ -491,6 +511,7 @@
                 "type": "-",
                 "x": 12,
                 "y": 4,
+                "db_id": 39,
                 "move_directions": [
                     "left",
                     "right"
@@ -500,6 +521,7 @@
                 "type": "D",
                 "x": 13,
                 "y": 4,
+                "db_id": 10,
                 "move_directions": [
                     "left"
                 ],
@@ -586,6 +608,7 @@
                 "type": "|",
                 "x": 4,
                 "y": 5,
+                "db_id": 18,
                 "move_directions": [
                     "up",
                     "down"
@@ -595,6 +618,7 @@
                 "type": "|",
                 "x": 11,
                 "y": 5,
+                "db_id": 19,
                 "move_directions": [
                     "up",
                     "down"
@@ -604,6 +628,7 @@
                 "type": "M",
                 "x": 2,
                 "y": 6,
+                "db_id": 14,
                 "move_directions": [
                     "right"
                 ],
@@ -689,6 +714,7 @@
                 "type": "-",
                 "x": 3,
                 "y": 6,
+                "db_id": 40,
                 "move_directions": [
                     "left",
                     "right"
@@ -698,6 +724,7 @@
                 "type": "+",
                 "x": 4,
                 "y": 6,
+                "db_id": 6,
                 "move_directions": [
                     "up",
                     "down",
@@ -709,6 +736,7 @@
                 "type": "-",
                 "x": 5,
                 "y": 6,
+                "db_id": 41,
                 "move_directions": [
                     "left",
                     "right"
@@ -774,6 +802,7 @@
                 "type": "-",
                 "x": 6,
                 "y": 6,
+                "db_id": 42,
                 "move_directions": [
                     "left",
                     "right"
@@ -783,6 +812,7 @@
                 "type": "-",
                 "x": 7,
                 "y": 6,
+                "db_id": 43,
                 "move_directions": [
                     "left",
                     "right"
@@ -792,6 +822,7 @@
                 "type": "-",
                 "x": 8,
                 "y": 6,
+                "db_id": 44,
                 "move_directions": [
                     "left",
                     "right"
@@ -801,6 +832,7 @@
                 "type": "-",
                 "x": 9,
                 "y": 6,
+                "db_id": 45,
                 "move_directions": [
                     "left",
                     "right"
@@ -810,6 +842,7 @@
                 "type": "-",
                 "x": 10,
                 "y": 6,
+                "db_id": 46,
                 "move_directions": [
                     "left",
                     "right"
@@ -819,6 +852,7 @@
                 "type": "+",
                 "x": 11,
                 "y": 6,
+                "db_id": 7,
                 "move_directions": [
                     "up",
                     "down",
@@ -830,6 +864,7 @@
                 "type": "-",
                 "x": 12,
                 "y": 6,
+                "db_id": 47,
                 "move_directions": [
                     "left",
                     "right"
@@ -839,6 +874,7 @@
                 "type": "D",
                 "x": 13,
                 "y": 6,
+                "db_id": 11,
                 "move_directions": [
                     "left"
                 ],
@@ -925,6 +961,7 @@
                 "type": "|",
                 "x": 4,
                 "y": 7,
+                "db_id": 20,
                 "move_directions": [
                     "up",
                     "down"
@@ -934,6 +971,7 @@
                 "type": "|",
                 "x": 11,
                 "y": 7,
+                "db_id": 21,
                 "move_directions": [
                     "up",
                     "down"
@@ -943,6 +981,7 @@
                 "type": "M",
                 "x": 2,
                 "y": 8,
+                "db_id": 15,
                 "move_directions": [
                     "right"
                 ],
@@ -1030,6 +1069,7 @@
                 "type": "-",
                 "x": 3,
                 "y": 8,
+                "db_id": 48,
                 "move_directions": [
                     "left",
                     "right"
@@ -1039,6 +1079,7 @@
                 "type": "+",
                 "x": 4,
                 "y": 8,
+                "db_id": 8,
                 "move_directions": [
                     "up",
                     "down",
@@ -1050,6 +1091,7 @@
                 "type": "-",
                 "x": 5,
                 "y": 8,
+                "db_id": 49,
                 "move_directions": [
                     "left",
                     "right"
@@ -1059,6 +1101,7 @@
                 "type": "-",
                 "x": 6,
                 "y": 8,
+                "db_id": 50,
                 "move_directions": [
                     "left",
                     "right"
@@ -1068,6 +1111,7 @@
                 "type": "-",
                 "x": 7,
                 "y": 8,
+                "db_id": 51,
                 "move_directions": [
                     "left",
                     "right"
@@ -1077,6 +1121,7 @@
                 "type": "-",
                 "x": 8,
                 "y": 8,
+                "db_id": 52,
                 "move_directions": [
                     "left",
                     "right"
@@ -1086,6 +1131,7 @@
                 "type": "-",
                 "x": 9,
                 "y": 8,
+                "db_id": 53,
                 "move_directions": [
                     "left",
                     "right"
@@ -1095,6 +1141,7 @@
                 "type": "-",
                 "x": 10,
                 "y": 8,
+                "db_id": 54,
                 "move_directions": [
                     "left",
                     "right"
@@ -1148,6 +1195,7 @@
                 "type": "+",
                 "x": 11,
                 "y": 8,
+                "db_id": 9,
                 "move_directions": [
                     "up",
                     "down",
@@ -1159,6 +1207,7 @@
                 "type": "-",
                 "x": 12,
                 "y": 8,
+                "db_id": 55,
                 "move_directions": [
                     "left",
                     "right"
@@ -1168,6 +1217,7 @@
                 "type": "D",
                 "x": 13,
                 "y": 8,
+                "db_id": 12,
                 "move_directions": [
                     "left"
                 ],
@@ -1258,6 +1308,7 @@
                 "type": "|",
                 "x": 4,
                 "y": 9,
+                "db_id": 56,
                 "move_directions": [
                     "up",
                     "down"
@@ -1267,6 +1318,7 @@
                 "type": "|",
                 "x": 11,
                 "y": 9,
+                "db_id": 57,
                 "move_directions": [
                     "up",
                     "down"
@@ -1276,6 +1328,7 @@
                 "type": "C",
                 "x": 4,
                 "y": 10,
+                "db_id": 22,
                 "move_directions": [
                     "up"
                 ],
@@ -1331,6 +1384,7 @@
                 "type": "C",
                 "x": 11,
                 "y": 10,
+                "db_id": 23,
                 "move_directions": [
                     "up"
                 ],

@@ -5,8 +5,10 @@ import threading
 import queue
 import time
 import Tables
+import pandastable
 from SBD_Applications import *
 from FollowPathThread import *
+from SBD_DataBaseLogger import *
 from Tracks import *
 from random import randint
 import sys
@@ -14,7 +16,7 @@ import sys
 #class Plate( Button ):
 class Plate():
 
-    def __init__( self, table ):
+    def __init__( self, table, number ):
         print("plyta - poczatek")
         self.table = table
         self.table.setOccupied( self )
@@ -37,7 +39,14 @@ class Plate():
         self.framebackground.bind('<Left>',     lambda event: self.manualMovePlate( 'left' ))
         self.framebackground.bind('<Right>',    lambda event: self.manualMovePlate( 'right' ))
 
-        self.label = Label( self.frame, height = 1, width=2, text = '123', bg='grey')
+        number_text = StringVar()
+        number_text.set( number )
+        self.rfid_number = number
+        self.formOnPlate = False
+        self.formFiled = False
+
+        #self.label = Label( self.frame, height = 1, width=2, text = '123', bg='grey')
+        self.label = Label( self.frame, height = 1, width=2, textvariable = number_text, bg='grey')
         self.label.place( relx = 0.05, rely = 0.05 )
         self.label.bind('<Button-1>', lambda event: self.setFocusOnPlate())
         self.label.bind('<Button-3>', self.showPlateMenu )
@@ -93,6 +102,29 @@ class Plate():
                 self.menu.add_command( label = "Zacznij rysować ścieżkę", command = self.startNewTrackForPlate )
                 self.menu.add_separator()
                 self.menu.add_command( label = "Usuń płytę", command = self.deletePlate )
+
+                if isinstance( self.table, Tables.ComposingTable ):
+                    self.menu.add_separator()
+
+                    self.menu.add_command( label = "Połóż formę", command = self.showPutFormMenu )
+
+                    if self.formOnPlate:
+                        self.menu.add_command( label = "Usuń formy", command = self.removeForms )
+
+                if self.formOnPlate:    
+
+                    if not self.formFiled:
+
+                        if isinstance( self.table, Tables.MouldingTable ):
+                            self.menu.add_separator()
+                            self.menu.add_command( label = "Wypełnij formy", command = self.fillFormOnPlate )
+
+                    else:  
+
+                        if isinstance( self.table, Tables.DemouldingTable ):
+                            self.menu.add_separator()
+                            self.menu.add_command( label = "Opróżnij formy", command = self.emptyFormOnPlate )
+                    
             else:
                 self.menu.add_command( label = "Zatrzymaj płytę", command = self.finishFollowingPath )
 
@@ -104,11 +136,58 @@ class Plate():
         self.gui.new_track = Track( self.gui, self.table )
 
     def deletePlate( self ):
+
+        db_read = SBD_DataBaseLogger()
+        db_read.removeAssembly( self.rfid_number )
+
         self.table.setFree()
         self.gui.selected_plate = None
         self.frame.destroy()
         self.menu.destroy()
+
+    def showPutFormMenu( self ):
+        popup_width  = 600
+        popup_height = 600
+        popup_x_root = int( self.gui.window.winfo_x() + self.gui.window_width  / 2 - popup_width  / 2 )
+        popup_y_root = int( self.gui.window.winfo_y() + self.gui.window_height / 2 - popup_height / 2 )
+        popup_size   = "{}x{}+{}+{}".format( popup_width, popup_height, popup_x_root, popup_y_root )
+        popup = Toplevel()
+        popup.title("Wybierz formę")
+        popup.geometry( popup_size )
+        popup.resizable( False, False )
+
+        db_read = SBD_DataBaseLogger()
+        df = db_read.showAvailableOrders()
+
+        background = Frame( popup, width = 600 , height = 500 )
+        background.pack_propagate( 0 )
+        background.place( x = 0, y = 50 )
         
+        pt = pandastable.Table(background, dataframe = df )
+        pt.show()
+                
+        label_start_table = Label( popup, text = "Wybierz formę na płytę: " ).place( x = 20, y = 20 )
+        button_accept = Button( popup, text = "Wybierz", command = lambda : self.putFormMenuAccept( popup ) ).place( x = 20,  y = 560 )
+        button_cancel = Button( popup, text = "Anuluj",  command = lambda : self.putFormMenuCancel( popup ) ).place( x = 120,  y = 560 )
+
+    def putFormMenuAccept( self, widget ):
+        widget.destroy()
+        self.formOnPlate = True
+        self.formFiled = False
+
+    def putFormMenuCancel( self, widget ):
+        widget.destroy()
+
+    def removeForms( self ):
+        self.formOnPlate = False
+        self.formFiled = False
+
+    def fillFormOnPlate( self ):
+        self.formFiled = True
+        
+    def emptyFormOnPlate( self ):
+        self.formFiled = False
+
     def setFocusOnPlate( self ):
         self.framebackground.focus_set()
         self.gui.selected_plate = self
@@ -250,6 +329,10 @@ class Plate():
                             move_done = self.movePlateRight()
 
             if move_done:
+
+                db_read = SBD_DataBaseLogger()
+                db_read.moveAssembly( self.rfid_number, next_table.db_id )
+
                 self.table.setFree()
                 self.table = next_table
                 self.table.setOccupied( self )

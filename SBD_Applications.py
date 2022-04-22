@@ -112,18 +112,19 @@ class SBD_Application():
             table_x = self.config_file['tables']['objects'][table_name]['x']
             table_y = self.config_file['tables']['objects'][table_name]['y']
             table_type = self.config_file['tables']['objects'][table_name]['type']
+            table_db_id = self.config_file['tables']['objects'][table_name]['db_id']
             possible_moves = self.config_file['tables']['objects'][table_name]['move_directions']
 
             if table_type == "D":
-                table = DemouldingTable( self, table_type, possible_moves, table_x, table_y, table_name )
+                table = DemouldingTable( self, table_type, possible_moves, table_x, table_y, table_name, table_db_id )
             elif table_type == "M":
-                table = MouldingTable( self, table_type, possible_moves, table_x, table_y, table_name )
+                table = MouldingTable( self, table_type, possible_moves, table_x, table_y, table_name, table_db_id )
             elif table_type == "C":
-                table = ComposingTable( self, table_type, possible_moves, table_x, table_y, table_name )
+                table = ComposingTable( self, table_type, possible_moves, table_x, table_y, table_name, table_db_id )
             elif table_type == "+":
-                table = TurnTable( self, table_type, possible_moves, table_x, table_y, table_name )
+                table = TurnTable( self, table_type, possible_moves, table_x, table_y, table_name, table_db_id )
             elif table_type == "|" or table_type == "-":
-                table = ConveyorTable( self, table_type, possible_moves, table_x, table_y, table_name )
+                table = ConveyorTable( self, table_type, possible_moves, table_x, table_y, table_name, table_db_id )
             
             self.tables_list[table_y][table_x] = table
 
